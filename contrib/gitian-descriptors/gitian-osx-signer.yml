@@ -1,5 +1,5 @@
 ---
-name: "dash-dmg-signer"
+name: "bitnodes-dmg-signer"
 suites:
 - "precise"
 architectures:
@@ -7,10 +7,10 @@ architectures:
 packages:
 - "libc6:i386"
 - "faketime"
-reference_datetime: "2016-01-01 00:00:00"
+reference_datetime: "2017-12-12 00:00:00"
 remotes: []
 files:
-- "dash-osx-unsigned.tar.gz"
+- "bitnodes-osx-unsigned.tar.gz"
 - "signature.tar.gz"
 script: |
   WRAP_DIR=$HOME/wrapped
@@ -28,10 +28,10 @@ script: |
     chmod +x ${WRAP_DIR}/${prog}
   done
 
-  UNSIGNED=dash-osx-unsigned.tar.gz
-  SIGNED=dash-osx-signed.dmg
+  UNSIGNED=bitnodes-osx-unsigned.tar.gz
+  SIGNED=bitnodes-osx-signed.dmg
 
   tar -xf ${UNSIGNED}
   ./detached-sig-apply.sh ${UNSIGNED} signature.tar.gz
-  ${WRAP_DIR}/genisoimage -no-cache-inodes -D -l -probe -V "Dash-Qt" -no-pad -r -apple -o uncompressed.dmg signed-app
+  ${WRAP_DIR}/genisoimage -no-cache-inodes -D -l -probe -V "BitNodes-Qt" -no-pad -r -apple -o uncompressed.dmg signed-app
   ${WRAP_DIR}/dmg dmg uncompressed.dmg ${OUTDIR}/${SIGNED}

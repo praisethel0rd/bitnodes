@@ -78,7 +78,7 @@ HEADERS += src/activemasternode.h \
            src/crypter.h \
            src/darksend-relay.h \
            src/darksend.h \
-           src/dash-config.h \
+           src/bitnodes-config.h \
            src/db.h \
            src/eccryptoverify.h \
            src/ecwrapper.h \
@@ -131,7 +131,7 @@ HEADERS += src/activemasternode.h \
            src/wallet_ismine.h \
            src/walletdb.h \
            src/compat/sanity.h \
-           src/config/dash-config.h \
+           src/config/bitnodes-config.h \
            src/crypto/common.h \
            src/crypto/hmac_sha256.h \
            src/crypto/hmac_sha512.h \
@@ -152,6 +152,8 @@ HEADERS += src/activemasternode.h \
            src/crypto/sph_simd.h \
            src/crypto/sph_skein.h \
            src/crypto/sph_types.h \
+           src/crypto/sph_hamsi.h \
+           src/crypto/sph_fugue.h \
            src/json/json_spirit.h \
            src/json/json_spirit_error_position.h \
            src/json/json_spirit_reader.h \
@@ -333,7 +335,7 @@ HEADERS += src/activemasternode.h \
            src/secp256k1/src/java/org_bitcoin_NativeSecp256k1.h \
            src/crypto/aes_helper.c \
            src/qt/bitcoinamountfield.moc \
-           src/qt/dash.moc \
+           src/qt/bitnodes.moc \
            src/qt/intro.moc \
            src/qt/overviewpage.moc \
            src/qt/rpcconsole.moc \
@@ -374,9 +376,9 @@ SOURCES += src/activemasternode.cpp \
            src/crypter.cpp \
            src/darksend-relay.cpp \
            src/darksend.cpp \
-           src/dash-cli.cpp \
-           src/dash-tx.cpp \
-           src/dashd.cpp \
+           src/bitnodes-cli.cpp \
+           src/bitnodes-tx.cpp \
+           src/bitnodesd.cpp \
            src/db.cpp \
            src/eccryptoverify.cpp \
            src/ecwrapper.cpp \
@@ -454,6 +456,9 @@ SOURCES += src/activemasternode.cpp \
            src/crypto/shavite.c \
            src/crypto/simd.c \
            src/crypto/skein.c \
+           src/crypto/hamsi.c \
+           src/crypto/hamsi_helper.c \
+           src/crypto/fugue.c \
            src/json/json_spirit_reader.cpp \
            src/json/json_spirit_value.cpp \
            src/json/json_spirit_writer.cpp \
@@ -471,8 +476,8 @@ SOURCES += src/activemasternode.cpp \
            src/qt/coincontroltreewidget.cpp \
            src/qt/csvmodelwriter.cpp \
            src/qt/darksendconfig.cpp \
-           src/qt/dash.cpp \
-           src/qt/dashstrings.cpp \
+           src/qt/bitnodes.cpp \
+           src/qt/bitnodesstrings.cpp \
            src/qt/editaddressdialog.cpp \
            src/qt/guiutil.cpp \
            src/qt/intro.cpp \
@@ -550,7 +555,7 @@ SOURCES += src/activemasternode.cpp \
            src/test/sighash_tests.cpp \
            src/test/sigopcount_tests.cpp \
            src/test/skiplist_tests.cpp \
-           src/test/test_dash.cpp \
+           src/test/test_bitnodes.cpp \
            src/test/timedata_tests.cpp \
            src/test/transaction_tests.cpp \
            src/test/uint256_tests.cpp \
@@ -641,20 +646,7 @@ SOURCES += src/activemasternode.cpp \
            src/leveldb/helpers/memenv/memenv.cc \
            src/leveldb/helpers/memenv/memenv_test.cc \
            src/secp256k1/src/java/org_bitcoin_NativeSecp256k1.c
-RESOURCES += src/qt/dash.qrc src/qt/dash_locale.qrc
-TRANSLATIONS += src/qt/locale/dash_bg.ts \
-                src/qt/locale/dash_de.ts \
-                src/qt/locale/dash_en.ts \
-                src/qt/locale/dash_es.ts \
-                src/qt/locale/dash_fi.ts \
-                src/qt/locale/dash_fr.ts \
-                src/qt/locale/dash_it.ts \
-                src/qt/locale/dash_ja.ts \
-                src/qt/locale/dash_pl.ts \
-                src/qt/locale/dash_pt.ts \
-                src/qt/locale/dash_ru.ts \
-                src/qt/locale/dash_sk.ts \
-                src/qt/locale/dash_sv.ts \
-                src/qt/locale/dash_vi.ts \
-                src/qt/locale/dash_zh_CN.ts \
-                src/qt/locale/dash_zh_TW.ts
+RESOURCES += src/qt/bitnodes.qrc src/qt/bitnodes_locale.qrc
+TRANSLATIONS += src/qt/locale/bitnodes_de.ts \
+                src/qt/locale/bitnodes_en.ts \
+                src/qt/locale/bitnodes_ru.ts
