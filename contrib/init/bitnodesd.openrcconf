@@ -1,0 +1,27 @@
+# /etc/conf.d/bitnodesd: config file for /etc/init.d/bitnodesd
+
+# Config file location
+#BITCOIND_CONFIGFILE="/etc/bitnodes/bitnodes.conf"
+
+# What directory to write pidfile to?  (created and owned by $BITCOIND_USER)
+#BITCOIND_PIDDIR="/var/run/bitnodesd"
+
+# What filename to give the pidfile
+#BITCOIND_PIDFILE="${BITCOIND_PIDDIR}/bitnodesd.pid"
+
+# Where to write bitnodesd data (be mindful that the blockchain is large)
+#BITCOIND_DATADIR="/var/lib/bitnodesd"
+
+# User and group to own bitnodesd process
+#BITCOIND_USER="bitnodes"
+#BITCOIND_GROUP="bitnodes"
+
+# Path to bitnodesd executable
+#BITCOIND_BIN="/usr/bin/bitnodesd"
+
+# Nice value to run bitnodesd under
+#BITCOIND_NICE=0
+
+# Additional options (avoid -conf and -datadir, use flags above)
+BITCOIND_OPTS="-disablewallet"
+

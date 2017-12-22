@@ -1,0 +1,12 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=BitNodes
+Comment=BitNodes P2P Cryptocurrency
+Comment[fr]=BitNodes, monnaie virtuelle cryptographique pair à pair
+Comment[tr]=BitNodes, eşten eşe kriptografik sanal para birimi
+Exec=bitnodes-qt %u
+Terminal=false
+Type=Application
+Icon=bitnodes128
+MimeType=x-scheme-handler/bitnodes;
+Categories=Office;Finance;

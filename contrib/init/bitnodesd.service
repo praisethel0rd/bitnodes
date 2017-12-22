@@ -1,0 +1,22 @@
+[Unit]
+Description=BitNodes's distributed currency daemon
+After=network.target
+
+[Service]
+User=bitnodes
+Group=bitnodes
+
+Type=forking
+PIDFile=/var/lib/bitnodesd/bitnodesd.pid
+ExecStart=/usr/bin/bitnodesd -daemon -pid=/var/lib/bitnodesd/bitnodesd.pid \
+-conf=/etc/bitnodes/bitnodes.conf -datadir=/var/lib/bitnodesd -disablewallet
+
+Restart=always
+PrivateTmp=true
+TimeoutStopSec=60s
+TimeoutStartSec=2s
+StartLimitInterval=120s
+StartLimitBurst=5
+
+[Install]
+WantedBy=multi-user.target
