@@ -1,6 +1,6 @@
 // Copyright (c) 2009-2010 Satoshi Nakamoto
 // Copyright (c) 2009-2014 The Bitcoin developers
-// Distributed under the MIT/X11 software license, see the accompanying
+// Distributed under the MIT/X13 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #include "protocol.h"
@@ -21,7 +21,6 @@ static const char* ppszTypeName[] =
     "filtered block",
     "tx lock request",
     "tx lock vote",
-    "spork",
     "mn winner",
     "mn scan error",
     "mn budget vote",

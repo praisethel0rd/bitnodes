@@ -1,5 +1,5 @@
 // Copyright (c) 2014-2015 The Dash Developers
-// Distributed under the MIT/X11 software license, see the accompanying
+// Distributed under the MIT/X13 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #include "main.h"
@@ -31,9 +31,9 @@ Value mnbudget(const Array& params, bool fHelp)
                 "\nAvailable commands:\n"
                 "  prepare            - Prepare proposal for network by signing and creating tx\n"
                 "  submit             - Submit proposal for network\n"
-                "  vote-many          - Vote on a Dash initiative\n"
-                "  vote-alias         - Vote on a Dash initiative\n"
-                "  vote               - Vote on a Dash initiative/budget\n"
+                "  vote-many          - Vote on a BitNodes initiative\n"
+                "  vote-alias         - Vote on a BitNodes initiative\n"
+                "  vote               - Vote on a BitNodes initiative/budget\n"
                 "  getvotes           - Show current masternode budgets\n"
                 "  getinfo            - Show current masternode budgets\n"
                 "  show               - Show all budgets\n"
@@ -60,7 +60,7 @@ Value mnbudget(const Array& params, bool fHelp)
         mnEntries = masternodeConfig.getEntries();
 
         if (params.size() != 7)
-            throw runtime_error("Correct usage is 'mnbudget prepare proposal-name url payment_count block_start dash_address monthly_payment_dash'");
+            throw runtime_error("Correct usage is 'mnbudget prepare proposal-name url payment_count block_start bitnodes_address monthly_payment_bitnodes'");
 
         std::string strProposalName = params[1].get_str();
         if(strProposalName.size() > 20)
@@ -93,9 +93,9 @@ Value mnbudget(const Array& params, bool fHelp)
 
         CBitcoinAddress address(params[5].get_str());
         if (!address.IsValid())
-            throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid Dash address");
+            throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid BitNodes address");
 
-        // Parse Dash address
+        // Parse BitNodes address
         CScript scriptPubKey = GetScriptForDestination(address.Get());
         CAmount nAmount = AmountFromValue(params[6]);
 
@@ -137,7 +137,7 @@ Value mnbudget(const Array& params, bool fHelp)
         mnEntries = masternodeConfig.getEntries();
 
         if (params.size() != 8)
-            throw runtime_error("Correct usage is 'mnbudget submit proposal-name url payment_count block_start dash_address monthly_payment_dash fee_tx'");
+            throw runtime_error("Correct usage is 'mnbudget submit proposal-name url payment_count block_start bitnodes_address monthly_payment_bitnodes fee_tx'");
 
         // Check these inputs the same way we check the vote commands:
         // **********************************************************
@@ -173,9 +173,9 @@ Value mnbudget(const Array& params, bool fHelp)
 
         CBitcoinAddress address(params[5].get_str());
         if (!address.IsValid())
-            throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid Dash address");
+            throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid BitNodes address");
 
-        // Parse Dash address
+        // Parse BitNodes address
         CScript scriptPubKey = GetScriptForDestination(address.Get());
         CAmount nAmount = AmountFromValue(params[6]);
         uint256 hash = ParseHashV(params[7], "parameter 1");

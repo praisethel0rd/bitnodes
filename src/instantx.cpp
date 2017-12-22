@@ -1,6 +1,4 @@
 
-
-
 #include "sync.h"
 #include "net.h"
 #include "key.h"
@@ -11,7 +9,6 @@
 #include "activemasternode.h"
 #include "masternodeman.h"
 #include "darksend.h"
-#include "spork.h"
 #include <boost/lexical_cast.hpp>
 
 using namespace std;
@@ -35,7 +32,6 @@ int nCompleteTXLocks;
 void ProcessMessageInstantX(CNode* pfrom, std::string& strCommand, CDataStream& vRecv)
 {
     if(fLiteMode) return; //disable all darksend/masternode related functionality
-    if(!IsSporkActive(SPORK_2_INSTANTX)) return;
     if(!masternodeSync.IsBlockchainSynced()) return;
 
     if (strCommand == "ix")
@@ -191,7 +187,7 @@ bool IsIXTXValid(const CTransaction& txCollateral){
         }
     }
 
-    if(nValueOut > GetSporkValue(SPORK_5_MAX_VALUE)*COIN){
+    if(nValueOut > 1000*COIN){
         LogPrint("instantx", "IsIXTXValid - Transaction value too high - %s\n", txCollateral.ToString().c_str());
         return false;
     }
@@ -567,4 +563,35 @@ int CTransactionLock::CountSignatures()
         }
     }
     return n;
+}
+
+void ReprocessBlocks(int nBlocks) 
+{   
+    std::map<uint256, int64_t>::iterator it = mapRejectedBlocks.begin();
+    while(it != mapRejectedBlocks.end()){
+        //use a window twice as large as is usual for the nBlocks we want to reset
+        if((*it).second  > GetTime() - (nBlocks*60*5)) {   
+            BlockMap::iterator mi = mapBlockIndex.find((*it).first);
+            if (mi != mapBlockIndex.end() && (*mi).second) {
+                LOCK(cs_main);
+                
+                CBlockIndex* pindex = (*mi).second;
+                LogPrintf("ReprocessBlocks - %s\n", (*it).first.ToString());
+
+                CValidationState state;
+                ReconsiderBlock(state, pindex);
+            }
+        }
+        ++it;
+    }
+
+    CValidationState state;
+    {
+        LOCK(cs_main);
+        DisconnectBlocksAndReprocess(nBlocks);
+    }
+
+    if (state.IsValid()) {
+        ActivateBestChain(state);
+    }
 }

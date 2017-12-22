@@ -1,17 +1,17 @@
-// Copyright (c) 2014-2015 The Dash developers
+// Copyright (c) 2014-2017 The Dash developers
+// Copyright (c) 2017 The BitNodes developers
 
-// Distributed under the MIT/X11 software license, see the accompanying
+// Distributed under the MIT/X13 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 #ifndef MASTERNODE_SYNC_H
 #define MASTERNODE_SYNC_H
 
 #define MASTERNODE_SYNC_INITIAL           0
-#define MASTERNODE_SYNC_SPORKS            1
 #define MASTERNODE_SYNC_LIST              2
-#define MASTERNODE_SYNC_MNW               3
-#define MASTERNODE_SYNC_BUDGET            4
+#define MASTERNODE_SYNC_MNW               4
+#define MASTERNODE_SYNC_BUDGET            6
 #define MASTERNODE_SYNC_BUDGET_PROP       10
-#define MASTERNODE_SYNC_BUDGET_FIN        11
+#define MASTERNODE_SYNC_BUDGET_FIN        12
 #define MASTERNODE_SYNC_FAILED            998
 #define MASTERNODE_SYNC_FINISHED          999
 

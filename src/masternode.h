@@ -1,6 +1,6 @@
-
-// Copyright (c) 2014-2015 The Dash developers
-// Distributed under the MIT/X11 software license, see the accompanying
+// Copyright (c) 2014-2017 The Dash developers
+// Copyright (c) 2017 The BitNodes developers
+// Distributed under the MIT/X13 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 #ifndef MASTERNODE_H
 #define MASTERNODE_H
@@ -13,7 +13,7 @@
 #include "main.h"
 #include "timedata.h"
 
-#define MASTERNODE_MIN_CONFIRMATIONS           15
+#define MASTERNODE_MIN_CONFIRMATIONS           12
 #define MASTERNODE_MIN_MNP_SECONDS             (10*60)
 #define MASTERNODE_MIN_MNB_SECONDS             (5*60)
 #define MASTERNODE_PING_SECONDS                (5*60)
@@ -58,9 +58,8 @@ public:
         READWRITE(vchSig);
     }
 
-    bool CheckAndUpdate(int& nDos, bool fRequireEnabled = true, bool fCheckSigTimeOnly = false);
+    bool CheckAndUpdate(int& nDos, bool fRequireEnabled = true);
     bool Sign(CKey& keyMasternode, CPubKey& pubKeyMasternode);
-    bool VerifySignature(CPubKey& pubKeyMasternode, int &nDos);
     void Relay();
 
     uint256 GetHash(){
@@ -101,7 +100,7 @@ public:
 
 
 //
-// The Masternode Class. For managing the Darksend process. It contains the input of the 1000DRK, signature to prove
+// The Masternode Class. For managing the Darksend process. It contains the input of the 1000NODE, signature to prove
 // it's the one who own that ip address and code for calculating the payment election.
 //
 class CMasternode
@@ -287,7 +286,6 @@ public:
     bool CheckAndUpdate(int& nDoS);
     bool CheckInputsAndAdd(int& nDos);
     bool Sign(CKey& keyCollateralAddress);
-    bool VerifySignature();
     void Relay();
 
     ADD_SERIALIZE_METHODS;

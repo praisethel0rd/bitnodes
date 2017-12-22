@@ -1,6 +1,6 @@
-// Copyright (c) 2014-2015 The Dash developers
-
-// Distributed under the MIT/X11 software license, see the accompanying
+// Copyright (c) 2014-2017 The Dash developers
+// Copyright (c) 2017 The BitNodes developers
+// Distributed under the MIT/X13 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 #ifndef MASTERNODE_BUDGET_H
 #define MASTERNODE_BUDGET_H
@@ -33,7 +33,7 @@ class CTxBudgetPayment;
 #define VOTE_NO       2
 
 static const CAmount BUDGET_FEE_TX = (5*COIN);
-static const int64_t BUDGET_FEE_CONFIRMATIONS = 6;
+static const int64_t BUDGET_FEE_CONFIRMATIONS = 5;
 static const int64_t BUDGET_VOTE_UPDATE_MIN = 60*60;
 
 extern std::vector<CBudgetProposalBroadcast> vecImmatureBudgetProposals;
@@ -80,7 +80,7 @@ class CBudgetManager
 private:
 
     //hold txes until they mature enough to use
-    map<uint256, uint256> mapCollateralTxids;
+    map<uint256, CTransaction> mapCollateral;
 
 public:
     // critical section to protect the inner data structures
@@ -261,7 +261,7 @@ public:
 
     //check to see if we should vote on this
     void AutoCheck();
-    //total dash paid out by this budget
+    //total bitnodes paid out by this budget
     CAmount GetTotalPayout();
     //vote on this finalized budget as a masternode
     void SubmitVote();

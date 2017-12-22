@@ -1,5 +1,6 @@
-// Copyright (c) 2014-2015 The Dash developers
-// Distributed under the MIT/X11 software license, see the accompanying
+// Copyright (c) 2014-2017 The Dash developers
+// Copyright (c) 2017 The BitNodes developers
+// Distributed under the MIT/X13 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #include "main.h"
@@ -9,7 +10,6 @@
 #include "masternode-budget.h"
 #include "masternode.h"
 #include "masternodeman.h"
-#include "spork.h"
 #include "util.h"
 #include "addrman.h"
 
@@ -137,9 +137,6 @@ void CMasternodeSync::GetNextAsset()
         case(MASTERNODE_SYNC_INITIAL):
         case(MASTERNODE_SYNC_FAILED): // should never be used here actually, use Reset() instead
             ClearFulfilledRequest();
-            RequestedMasternodeAssets = MASTERNODE_SYNC_SPORKS;
-            break;
-        case(MASTERNODE_SYNC_SPORKS):
             RequestedMasternodeAssets = MASTERNODE_SYNC_LIST;
             break;
         case(MASTERNODE_SYNC_LIST):
@@ -161,7 +158,6 @@ std::string CMasternodeSync::GetSyncStatus()
 {
     switch (masternodeSync.RequestedMasternodeAssets) {
         case MASTERNODE_SYNC_INITIAL: return _("Synchronization pending...");
-        case MASTERNODE_SYNC_SPORKS: return _("Synchronizing sporks...");
         case MASTERNODE_SYNC_LIST: return _("Synchronizing masternodes...");
         case MASTERNODE_SYNC_MNW: return _("Synchronizing masternode winners...");
         case MASTERNODE_SYNC_BUDGET: return _("Synchronizing budgets...");
@@ -216,7 +212,6 @@ void CMasternodeSync::ClearFulfilledRequest()
 
     BOOST_FOREACH(CNode* pnode, vNodes)
     {
-        pnode->ClearFulfilledRequest("getspork");
         pnode->ClearFulfilledRequest("mnsync");
         pnode->ClearFulfilledRequest("mnwsync");
         pnode->ClearFulfilledRequest("busync");
@@ -250,9 +245,7 @@ void CMasternodeSync::Process()
 
     if(RequestedMasternodeAssets == MASTERNODE_SYNC_INITIAL) GetNextAsset();
 
-    // sporks synced but blockchain is not, wait until we're almost at a recent block to continue
-    if(Params().NetworkID() != CBaseChainParams::REGTEST &&
-            !IsBlockchainSynced() && RequestedMasternodeAssets > MASTERNODE_SYNC_SPORKS) return;
+    if(Params().NetworkID() != CBaseChainParams::REGTEST && !IsBlockchainSynced() && RequestedMasternodeAssets > 0) return;
 
     TRY_LOCK(cs_vNodes, lockRecv);
     if(!lockRecv) return;
@@ -260,9 +253,7 @@ void CMasternodeSync::Process()
     BOOST_FOREACH(CNode* pnode, vNodes)
     {
         if(Params().NetworkID() == CBaseChainParams::REGTEST){
-            if(RequestedMasternodeAttempt <= 2) {
-                pnode->PushMessage("getsporks"); //get current network sporks
-            } else if(RequestedMasternodeAttempt < 4) {
+            if(RequestedMasternodeAttempt < 4) {
                 mnodeman.DsegUpdate(pnode); 
             } else if(RequestedMasternodeAttempt < 6) {
                 int nMnCount = mnodeman.CountEnabled();
@@ -273,18 +264,6 @@ void CMasternodeSync::Process()
                 RequestedMasternodeAssets = MASTERNODE_SYNC_FINISHED;
             }
             RequestedMasternodeAttempt++;
-            return;
-        }
-
-        //set to synced
-        if(RequestedMasternodeAssets == MASTERNODE_SYNC_SPORKS){
-            if(pnode->HasFulfilledRequest("getspork")) continue;
-            pnode->FulfilledRequest("getspork");
-
-            pnode->PushMessage("getsporks"); //get current network sporks
-            if(RequestedMasternodeAttempt >= 2) GetNextAsset();
-            RequestedMasternodeAttempt++;
-            
             return;
         }
 
@@ -303,15 +282,11 @@ void CMasternodeSync::Process()
                 // timeout
                 if(lastMasternodeList == 0 &&
                 (RequestedMasternodeAttempt >= MASTERNODE_SYNC_THRESHOLD*3 || GetTime() - nAssetSyncStarted > MASTERNODE_SYNC_TIMEOUT*5)) {
-                    if(IsSporkActive(SPORK_8_MASTERNODE_PAYMENT_ENFORCEMENT)) {
-                        LogPrintf("CMasternodeSync::Process - ERROR - Sync has failed, will retry later\n");
-                        RequestedMasternodeAssets = MASTERNODE_SYNC_FAILED;
-                        RequestedMasternodeAttempt = 0;
-                        lastFailure = GetTime();
-                        nCountFailures++;
-                    } else {
-                        GetNextAsset();
-                    }
+                    LogPrintf("CMasternodeSync::Process - ERROR - Sync has failed, will retry later\n");
+                    RequestedMasternodeAssets = MASTERNODE_SYNC_FAILED;
+                    RequestedMasternodeAttempt = 0;
+                    lastFailure = GetTime();
+                    nCountFailures++;
                     return;
                 }
 
@@ -334,15 +309,11 @@ void CMasternodeSync::Process()
                 // timeout
                 if(lastMasternodeWinner == 0 &&
                 (RequestedMasternodeAttempt >= MASTERNODE_SYNC_THRESHOLD*3 || GetTime() - nAssetSyncStarted > MASTERNODE_SYNC_TIMEOUT*5)) {
-                    if(IsSporkActive(SPORK_8_MASTERNODE_PAYMENT_ENFORCEMENT)) {
-                        LogPrintf("CMasternodeSync::Process - ERROR - Sync has failed, will retry later\n");
-                        RequestedMasternodeAssets = MASTERNODE_SYNC_FAILED;
-                        RequestedMasternodeAttempt = 0;
-                        lastFailure = GetTime();
-                        nCountFailures++;
-                    } else {
-                        GetNextAsset();
-                    }
+                    LogPrintf("CMasternodeSync::Process - ERROR - Sync has failed, will retry later\n");
+                    RequestedMasternodeAssets = MASTERNODE_SYNC_FAILED;
+                    RequestedMasternodeAttempt = 0;
+                    lastFailure = GetTime();
+                    nCountFailures++;
                     return;
                 }
 

@@ -1,6 +1,7 @@
 // Copyright (c) 2009-2010 Satoshi Nakamoto
 // Copyright (c) 2009-2014 The Bitcoin developers
-// Copyright (c) 2014-2015 The Dash developers
+// Copyright (c) 2014-2017 The Dash developers
+// Copyright (c) 2017 The BitNodes developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -15,10 +16,12 @@
 #include "instantx.h"
 #include "script/script.h"
 #include "script/sign.h"
-#include "spork.h"
+
 #include "timedata.h"
 #include "util.h"
 #include "utilmoneystr.h"
+
+#include "darksend.h"
 
 #include <assert.h>
 
@@ -39,12 +42,10 @@ bool fSendFreeTransactions = false;
 bool fPayAtLeastCustomFee = true;
 
 /** 
- * Fees smaller than this (in duffs) are considered zero fee (for transaction creation)
- * We are ~100 times smaller then bitcoin now (2015-06-23), set minTxFee 10 times higher
- * so it's still 10 times lower comparing to bitcoin.
+ * Fees smaller than this (in bit) are considered zero fee (for transaction creation)
  * Override with -mintxfee
  */
-CFeeRate CWallet::minTxFee = CFeeRate(10000);
+CFeeRate CWallet::minTxFee = CFeeRate(100000);
 
 /** @defgroup mapWallet
  *
@@ -2142,9 +2143,9 @@ bool CWallet::CreateTransaction(const vector<pair<CScript, CAmount> >& vecSend,
                     if(coin_type == ALL_COINS) {
                         strFailReason = _("Insufficient funds.");
                     } else if (coin_type == ONLY_NOT1000IFMN) {
-                        strFailReason = _("Unable to locate enough funds for this transaction that are not equal 1000 DASH.");
+                        strFailReason = _("Unable to locate enough funds for this transaction that are not equal 1000 NODE.");
                     } else if (coin_type == ONLY_NONDENOMINATED_NOT1000IFMN) {
-                        strFailReason = _("Unable to locate enough Darksend non-denominated funds for this transaction that are not equal 1000 DASH.");
+                        strFailReason = _("Unable to locate enough Darksend non-denominated funds for this transaction that are not equal 1000 NODE.");
                     } else {
                         strFailReason = _("Unable to locate enough Darksend denominated funds for this transaction.");
                         strFailReason += " " + _("Darksend uses exact denominated amounts to send funds, you might simply need to anonymize some more coins.");
@@ -2184,7 +2185,7 @@ bool CWallet::CreateTransaction(const vector<pair<CScript, CAmount> >& vecSend,
                 {
                     // Fill a vout to ourself
                     // TODO: pass in scriptChange instead of reservekey so
-                    // change transaction isn't always pay-to-dash-address
+                    // change transaction isn't always pay-to-bitnodes-address
                     CScript scriptChange;
 
                     // coin control: send change to custom address
@@ -3253,7 +3254,6 @@ bool CMerkleTx::AcceptToMemoryPool(bool fLimitFree, bool fRejectInsaneFee, bool 
 int CMerkleTx::GetTransactionLockSignatures() const
 {
     if(fLargeWorkForkFound || fLargeWorkInvalidChainFound) return -2;
-    if(!IsSporkActive(SPORK_2_INSTANTX)) return -3;
     if(!fEnableInstantX) return -1;
 
     //compile consessus vote

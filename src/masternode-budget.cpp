@@ -1,5 +1,6 @@
-// Copyright (c) 2014-2015 The Dash developers
-// Distributed under the MIT/X11 software license, see the accompanying
+// Copyright (c) 2014-2017 The Dash developers
+// Copyright (c) 2017 The BitNodes developers
+// Distributed under the MIT/X13 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #include "main.h"
@@ -22,9 +23,11 @@ std::map<uint256, int64_t> askedForSourceProposalOrBudget;
 std::vector<CBudgetProposalBroadcast> vecImmatureBudgetProposals;
 std::vector<CFinalizedBudgetBroadcast> vecImmatureFinalizedBudgets;
 
+int nSubmittedFinalBudget;
+
 int GetBudgetPaymentCycleBlocks(){
-    // Amount of blocks in a months period of time (using 2.6 minutes per) = (60*24*30)/2.6
-    if(Params().NetworkID() == CBaseChainParams::MAIN) return 16616;
+    // Amount of blocks in a months period of time (using 2 minutes per) = (60*24*30)/2
+    if(Params().NetworkID() == CBaseChainParams::MAIN) return 21600;
     //for testing purposes
 
     return 50; //ten times per day
@@ -120,19 +123,12 @@ void CBudgetManager::CheckOrphanVotes()
 
 void CBudgetManager::SubmitFinalBudget()
 {
-    static int nSubmittedHeight = 0; // height at which final budget was submitted last time
-    int nCurrentHeight;
+    CBlockIndex* pindexPrev = chainActive.Tip();
+    if(!pindexPrev) return;
 
-    {
-        TRY_LOCK(cs_main, locked);
-        if(!locked) return;
-        if(!chainActive.Tip()) return;
-        nCurrentHeight = chainActive.Height();
-    }
-
-    int nBlockStart = nCurrentHeight - nCurrentHeight % GetBudgetPaymentCycleBlocks() + GetBudgetPaymentCycleBlocks();
-    if(nSubmittedHeight >= nBlockStart) return;
-    if(nBlockStart - nCurrentHeight > 576*2) return; // allow submitting final budget only when 2 days left before payments
+    int nBlockStart = pindexPrev->nHeight - pindexPrev->nHeight % GetBudgetPaymentCycleBlocks() + GetBudgetPaymentCycleBlocks();
+    if(nSubmittedFinalBudget >= nBlockStart) return;
+    if(nBlockStart - pindexPrev->nHeight > 576*2) return; //submit final budget 2 days before payment
 
     std::vector<CBudgetProposal*> vBudgetProposals = budget.GetBudget();
     std::string strBudgetName = "main";
@@ -154,15 +150,14 @@ void CBudgetManager::SubmitFinalBudget()
     CFinalizedBudgetBroadcast tempBudget(strBudgetName, nBlockStart, vecTxBudgetPayments, 0);
     if(mapSeenFinalizedBudgets.count(tempBudget.GetHash())) {
         LogPrintf("CBudgetManager::SubmitFinalBudget - Budget already exists - %s\n", tempBudget.GetHash().ToString());    
-        nSubmittedHeight = nCurrentHeight;
+        nSubmittedFinalBudget = pindexPrev->nHeight;
         return; //already exists
     }
 
     //create fee tx
     CTransaction tx;
-    uint256 txidCollateral;
-
-    if(!mapCollateralTxids.count(tempBudget.GetHash())){
+    
+    if(!mapCollateral.count(tempBudget.GetHash())){
         CWalletTx wtx;
         if(!pwalletMain->GetBudgetSystemCollateralTX(wtx, tempBudget.GetHash(), false)){
             LogPrintf("CBudgetManager::SubmitFinalBudget - Can't make collateral transaction\n");
@@ -173,43 +168,28 @@ void CBudgetManager::SubmitFinalBudget()
         CReserveKey reservekey(pwalletMain);
         //send the tx to the network
         pwalletMain->CommitTransaction(wtx, reservekey, "ix");
+
+        mapCollateral.insert(make_pair(tempBudget.GetHash(), (CTransaction)wtx));
         tx = (CTransaction)wtx;
-        txidCollateral = tx.GetHash();
-        mapCollateralTxids.insert(make_pair(tempBudget.GetHash(), txidCollateral));
     } else {
-        txidCollateral = mapCollateralTxids[tempBudget.GetHash()];
+        tx = mapCollateral[tempBudget.GetHash()];
     }
 
-    int conf = GetIXConfirmations(txidCollateral);
-    CTransaction txCollateral;
-    uint256 nBlockHash;
-
-    if(!GetTransaction(txidCollateral, txCollateral, nBlockHash, true)) {
-        LogPrintf ("CBudgetManager::SubmitFinalBudget - Can't find collateral tx %s", txidCollateral.ToString());
-        return;
-    }
-
-    if (nBlockHash != uint256(0)) {
-        BlockMap::iterator mi = mapBlockIndex.find(nBlockHash);
-        if (mi != mapBlockIndex.end() && (*mi).second) {
-            CBlockIndex* pindex = (*mi).second;
-            if (chainActive.Contains(pindex)) {
-                conf += chainActive.Height() - pindex->nHeight + 1;
-            }
-        }
-    }
-
+    CTxIn in(COutPoint(tx.GetHash(), 0));
+    int conf = GetInputAgeIX(tx.GetHash(), in);
     /*
         Wait will we have 1 extra confirmation, otherwise some clients might reject this feeTX
         -- This function is tied to NewBlock, so we will propagate this budget while the block is also propagating
     */
     if(conf < BUDGET_FEE_CONFIRMATIONS+1){
-        LogPrintf ("CBudgetManager::SubmitFinalBudget - Collateral requires at least %d confirmations - %s - %d confirmations\n", BUDGET_FEE_CONFIRMATIONS+1, txidCollateral.ToString(), conf);
+        LogPrintf ("CBudgetManager::SubmitFinalBudget - Collateral requires at least %d confirmations - %s - %d confirmations\n", BUDGET_FEE_CONFIRMATIONS, tx.GetHash().ToString(), conf);
         return;
     }
 
+    nSubmittedFinalBudget = nBlockStart;
+
     //create the proposal incase we're the first to make it
-    CFinalizedBudgetBroadcast finalizedBudgetBroadcast(strBudgetName, nBlockStart, vecTxBudgetPayments, txidCollateral);
+    CFinalizedBudgetBroadcast finalizedBudgetBroadcast(strBudgetName, nBlockStart, vecTxBudgetPayments, tx.GetHash());
 
     std::string strError = "";
     if(!finalizedBudgetBroadcast.IsValid(strError)){
@@ -221,8 +201,6 @@ void CBudgetManager::SubmitFinalBudget()
     mapSeenFinalizedBudgets.insert(make_pair(finalizedBudgetBroadcast.GetHash(), finalizedBudgetBroadcast));
     finalizedBudgetBroadcast.Relay();
     budget.AddFinalizedBudget(finalizedBudgetBroadcast);
-    nSubmittedHeight = nCurrentHeight;
-    LogPrintf("CBudgetManager::SubmitFinalBudget - Done! %s\n", finalizedBudgetBroadcast.GetHash().ToString());
 }
 
 //
@@ -479,7 +457,7 @@ void CBudgetManager::FillBlockPayee(CMutableTransaction& txNew, CAmount nFees)
         ++it;
     }
 
-    CAmount blockValue = GetBlockValue(pindexPrev->nBits, pindexPrev->nHeight, nFees);
+    CAmount blockValue = GetBlockValue(pindexPrev->nHeight, nFees);
 
     //miners get the full amount on these blocks
     txNew.vout[0].nValue = blockValue;
@@ -791,10 +769,10 @@ CAmount CBudgetManager::GetTotalBudget(int nHeight)
     CAmount nSubsidy = 5 * COIN;
 
     if(Params().NetworkID() == CBaseChainParams::TESTNET){
-        for(int i = 46200; i <= nHeight; i += 210240) nSubsidy -= nSubsidy/14;
+        for(int i = 46200; i <= nHeight; i += 262800) nSubsidy -= nSubsidy/14;
     } else {
         // yearly decline of production by 7.1% per year, projected 21.3M coins max by year 2050.
-        for(int i = 210240; i <= nHeight; i += 210240) nSubsidy -= nSubsidy/14;
+        for(int i = 262800; i <= nHeight; i += 262800) nSubsidy -= nSubsidy/14;
     }
 
     // Amount of blocks in a months period of time (using 2.6 minutes per) = (60*24*30)/2.6
