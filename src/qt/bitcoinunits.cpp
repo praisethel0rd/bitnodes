@@ -1,6 +1,7 @@
 // Copyright (c) 2011-2014 The Bitcoin developers
-// Copyright (c) 2014-2015 The Dash developers
-// Distributed under the MIT/X11 software license, see the accompanying
+// Copyright (c) 2014-2017 The Dash developers
+// Copyright (c) 2017 The BitNodes developers
+// Distributed under the MIT/X13 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #include "bitcoinunits.h"
@@ -19,10 +20,10 @@ BitcoinUnits::BitcoinUnits(QObject *parent):
 QList<BitcoinUnits::Unit> BitcoinUnits::availableUnits()
 {
     QList<BitcoinUnits::Unit> unitlist;
-    unitlist.append(DASH);
-    unitlist.append(mDASH);
-    unitlist.append(uDASH);
-    unitlist.append(duffs);
+    unitlist.append(NODE);
+    unitlist.append(mNODE);
+    unitlist.append(uNODE);
+    unitlist.append(bit);
     return unitlist;
 }
 
@@ -30,10 +31,10 @@ bool BitcoinUnits::valid(int unit)
 {
     switch(unit)
     {
-    case DASH:
-    case mDASH:
-    case uDASH:
-    case duffs:
+    case NODE:
+    case mNODE:
+    case uNODE:
+    case bit:
         return true;
     default:
         return false;
@@ -44,63 +45,35 @@ QString BitcoinUnits::id(int unit)
 {
     switch(unit)
     {
-        case DASH: return QString("dash");
-        case mDASH: return QString("mdash");
-        case uDASH: return QString::fromUtf8("udash");
-        case duffs: return QString("duffs");
+        case NODE: return QString("node");
+        case mNODE: return QString("mnode");
+        case uNODE: return QString::fromUtf8("unode");
+        case bit: return QString("bit");
         default: return QString("???");
     }
 }
 
 QString BitcoinUnits::name(int unit)
 {
-    if(Params().NetworkID() == CBaseChainParams::MAIN)
+    switch(unit)
     {
-        switch(unit)
-        {
-            case DASH: return QString("DASH");
-            case mDASH: return QString("mDASH");
-            case uDASH: return QString::fromUtf8("μDASH");
-            case duffs: return QString("duffs");
-            default: return QString("???");
-        }
-    }
-    else
-    {
-        switch(unit)
-        {
-            case DASH: return QString("tDASH");
-            case mDASH: return QString("mtDASH");
-            case uDASH: return QString::fromUtf8("μtDASH");
-            case duffs: return QString("tduffs");
-            default: return QString("???");
-        }
+        case NODE: return QString("NODE");
+        case mNODE: return QString("mNODE");
+        case uNODE: return QString::fromUtf8("μNODE");
+        case bit: return QString("bit");
+        default: return QString("???");
     }
 }
 
 QString BitcoinUnits::description(int unit)
 {
-    if(Params().NetworkID() == CBaseChainParams::MAIN)
+    switch(unit)
     {
-        switch(unit)
-        {
-            case DASH: return QString("Dash");
-            case mDASH: return QString("Milli-Dash (1 / 1" THIN_SP_UTF8 "000)");
-            case uDASH: return QString("Micro-Dash (1 / 1" THIN_SP_UTF8 "000" THIN_SP_UTF8 "000)");
-            case duffs: return QString("Ten Nano-Dash (1 / 100" THIN_SP_UTF8 "000" THIN_SP_UTF8 "000)");
-            default: return QString("???");
-        }
-    }
-    else
-    {
-        switch(unit)
-        {
-            case DASH: return QString("TestDashs");
-            case mDASH: return QString("Milli-TestDash (1 / 1" THIN_SP_UTF8 "000)");
-            case uDASH: return QString("Micro-TestDash (1 / 1" THIN_SP_UTF8 "000" THIN_SP_UTF8 "000)");
-            case duffs: return QString("Ten Nano-TestDash (1 / 100" THIN_SP_UTF8 "000" THIN_SP_UTF8 "000)");
-            default: return QString("???");
-        }
+        case NODE: return QString("BitNodes");
+        case mNODE: return QString("Milli-BitNodes (1 / 1" THIN_SP_UTF8 "000)");
+        case uNODE: return QString("Micro-BitNodes (1 / 1" THIN_SP_UTF8 "000" THIN_SP_UTF8 "000)");
+        case bit: return QString("Ten Nano-BitNodes (1 / 100" THIN_SP_UTF8 "000" THIN_SP_UTF8 "000)");
+        default: return QString("???");
     }
 }
 
@@ -108,11 +81,11 @@ qint64 BitcoinUnits::factor(int unit)
 {
     switch(unit)
     {
-    case DASH:  return 100000000;
-    case mDASH: return 100000;
-    case uDASH: return 100;
-    case duffs: return 1;
-    default:   return 100000000;
+        case NODE:  return 100000000;
+        case mNODE: return 100000;
+        case uNODE: return 100;
+        case bit: return 1;
+        default:   return 100000000;
     }
 }
 
@@ -120,11 +93,11 @@ int BitcoinUnits::decimals(int unit)
 {
     switch(unit)
     {
-    case DASH: return 8;
-    case mDASH: return 5;
-    case uDASH: return 2;
-    case duffs: return 0;
-    default: return 0;
+        case NODE: return 8;
+        case mNODE: return 5;
+        case uNODE: return 2;
+        case bit: return 0;
+        default: return 0;
     }
 }
 

@@ -1,6 +1,7 @@
 // Copyright (c) 2011-2014 The Bitcoin developers
-// Copyright (c) 2014-2015 The Dash developers
-// Distributed under the MIT/X11 software license, see the accompanying
+// Copyright (c) 2014-2017 The Dash developers
+// Copyright (c) 2017 The BitNodes developers
+// Distributed under the MIT/X13 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #ifndef BITCOIN_QT_GUICONSTANTS_H
@@ -43,11 +44,11 @@ static const int MAX_URI_LENGTH = 255;
 #define EXPORT_IMAGE_SIZE 256
 
 /* Number of frames in spinner animation */
-#define SPINNER_FRAMES 35
+#define SPINNER_FRAMES 8
 
-#define QAPP_ORG_NAME "Dash"
-#define QAPP_ORG_DOMAIN "dashpay.io"
-#define QAPP_APP_NAME_DEFAULT "Dash-Qt"
-#define QAPP_APP_NAME_TESTNET "Dash-Qt-testnet"
+#define QAPP_ORG_NAME "BitNodes"
+#define QAPP_ORG_DOMAIN "bitnodes.co"
+#define QAPP_APP_NAME_DEFAULT "BitNodes-Qt"
+#define QAPP_APP_NAME_TESTNET "BitNodes-Qt-testnet"
 
 #endif // BITCOIN_QT_GUICONSTANTS_H
