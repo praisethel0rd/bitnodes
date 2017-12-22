@@ -108,7 +108,7 @@ void setupAddressWidget(QValidatedLineEdit *widget, QWidget *parent)
 #if QT_VERSION >= 0x040700
     // We don't want translators to use own addresses in translations
     // and this is the only place, where this address is supplied.
-    widget->setPlaceholderText(QObject::tr("Enter a BitNodes address (e.g. %1)").arg("XwnLY9Tf7Zsef8gMGL2fhWA9ZmMjt4KPwg"));
+    widget->setPlaceholderText(QObject::tr("Enter a BitNodes address (e.g. %1)").arg("NeSnpf9Us5mQU56jwYYEv4B4C6wBANfADM"));
 #endif
     widget->setValidator(new BitcoinAddressEntryValidator(parent));
     widget->setCheckValidator(new BitcoinAddressCheckValidator(parent));
