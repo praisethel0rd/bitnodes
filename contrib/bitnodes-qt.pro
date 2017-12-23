@@ -111,7 +111,6 @@ HEADERS += src/activemasternode.h \
            src/rpcprotocol.h \
            src/rpcserver.h \
            src/serialize.h \
-           src/spork.h \
            src/streams.h \
            src/sync.h \
            src/threadsafety.h \
@@ -419,7 +418,6 @@ SOURCES += src/activemasternode.cpp \
            src/rpcrawtransaction.cpp \
            src/rpcserver.cpp \
            src/rpcwallet.cpp \
-           src/spork.cpp \
            src/sync.cpp \
            src/timedata.cpp \
            src/txdb.cpp \
@@ -647,6 +645,4 @@ SOURCES += src/activemasternode.cpp \
            src/leveldb/helpers/memenv/memenv_test.cc \
            src/secp256k1/src/java/org_bitcoin_NativeSecp256k1.c
 RESOURCES += src/qt/bitnodes.qrc src/qt/bitnodes_locale.qrc
-TRANSLATIONS += src/qt/locale/bitnodes_de.ts \
-                src/qt/locale/bitnodes_en.ts \
-                src/qt/locale/bitnodes_ru.ts
+TRANSLATIONS += src/qt/locale/bitnodes_en.ts
