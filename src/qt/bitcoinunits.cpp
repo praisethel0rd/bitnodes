@@ -1,7 +1,7 @@
 // Copyright (c) 2011-2014 The Bitcoin developers
 // Copyright (c) 2014-2017 The Dash developers
-// Copyright (c) 2017 The BitNodes developers
-// Distributed under the MIT/X13 software license, see the accompanying
+// Copyright (c) 2017-2018 The BitNodesPro developers
+// Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #include "bitcoinunits.h"
@@ -20,10 +20,10 @@ BitcoinUnits::BitcoinUnits(QObject *parent):
 QList<BitcoinUnits::Unit> BitcoinUnits::availableUnits()
 {
     QList<BitcoinUnits::Unit> unitlist;
+    unitlist.append(XNODE);
+    unitlist.append(MNODE);
+    unitlist.append(UNODE);
     unitlist.append(NODE);
-    unitlist.append(mNODE);
-    unitlist.append(uNODE);
-    unitlist.append(bit);
     return unitlist;
 }
 
@@ -31,24 +31,23 @@ bool BitcoinUnits::valid(int unit)
 {
     switch(unit)
     {
+    case XNODE:
+    case MNODE:
+    case UNODE:
     case NODE:
-    case mNODE:
-    case uNODE:
-    case bit:
         return true;
     default:
         return false;
     }
 }
-
 QString BitcoinUnits::id(int unit)
 {
     switch(unit)
     {
+        case XNODE: return QString("xnode");
+        case MNODE: return QString("mnode");
+        case UNODE: return QString::fromUtf8("unode");
         case NODE: return QString("node");
-        case mNODE: return QString("mnode");
-        case uNODE: return QString::fromUtf8("unode");
-        case bit: return QString("bit");
         default: return QString("???");
     }
 }
@@ -57,10 +56,10 @@ QString BitcoinUnits::name(int unit)
 {
     switch(unit)
     {
+        case XNODE: return QString("XNODE");
+        case MNODE: return QString("MNODE");
+        case UNODE: return QString::fromUtf8("UNODE");
         case NODE: return QString("NODE");
-        case mNODE: return QString("mNODE");
-        case uNODE: return QString::fromUtf8("μNODE");
-        case bit: return QString("bit");
         default: return QString("???");
     }
 }
@@ -69,10 +68,10 @@ QString BitcoinUnits::description(int unit)
 {
     switch(unit)
     {
-        case NODE: return QString("BitNodes");
-        case mNODE: return QString("Milli-BitNodes (1 / 1" THIN_SP_UTF8 "000)");
-        case uNODE: return QString("Micro-BitNodes (1 / 1" THIN_SP_UTF8 "000" THIN_SP_UTF8 "000)");
-        case bit: return QString("Ten Nano-BitNodes (1 / 100" THIN_SP_UTF8 "000" THIN_SP_UTF8 "000)");
+        case XNODE: return QString("BitNodesPro");
+        case MNODE: return QString("Milli-BitNodesPro (1 / 1" THIN_SP_UTF8 "000)");
+        case UNODE: return QString("Micro-BitNodesPro (1 / 1" THIN_SP_UTF8 "000" THIN_SP_UTF8 "000)");
+        case NODE: return QString("Ten Nano-BitNodesPro (1 / 100" THIN_SP_UTF8 "000" THIN_SP_UTF8 "000)");
         default: return QString("???");
     }
 }
@@ -81,10 +80,10 @@ qint64 BitcoinUnits::factor(int unit)
 {
     switch(unit)
     {
-        case NODE:  return 100000000;
-        case mNODE: return 100000;
-        case uNODE: return 100;
-        case bit: return 1;
+        case XNODE:  return 100000000;
+        case MNODE: return 100000;
+        case UNODE: return 100;
+        case NODE: return 1;
         default:   return 100000000;
     }
 }
@@ -93,10 +92,10 @@ int BitcoinUnits::decimals(int unit)
 {
     switch(unit)
     {
-        case NODE: return 8;
-        case mNODE: return 5;
-        case uNODE: return 2;
-        case bit: return 0;
+        case XNODE: return 8;
+        case MNODE: return 5;
+        case UNODE: return 2;
+        case NODE: return 0;
         default: return 0;
     }
 }

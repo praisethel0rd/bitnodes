@@ -1,4 +1,4 @@
-BitNodes Core 0.17.0
+BitNodesPro Core 0.17.0
 =====================
 
 Setup
@@ -7,46 +7,46 @@ Setup
 
 Running
 ---------------------
-The following are some helpful notes on how to run BitNodes on your native platform.
+The following are some helpful notes on how to run BitNodesPro on your native platform.
 
 ### Unix
 
-You need the Qt4 run-time libraries to run BitNodes-Qt. On Debian or Ubuntu:
+You need the Qt4 run-time libraries to run BitNodesPro-Qt. On Debian or Ubuntu:
 
 	sudo apt-get install libqtgui4
 
 Unpack the files into a directory and run:
 
-- bin/32/bitnodes-qt (GUI, 32-bit) or bin/32/bitnodesd (headless, 32-bit)
-- bin/64/bitnodes-qt (GUI, 64-bit) or bin/64/bitnodesd (headless, 64-bit)
+- bin/32/bitnodespro-qt (GUI, 32-bit) or bin/32/bitnodesprod (headless, 32-bit)
+- bin/64/bitnodespro-qt (GUI, 64-bit) or bin/64/bitnodesprod (headless, 64-bit)
 
 
 
 ### Windows
 
-Unpack the files into a directory, and then run bitnodes-qt.exe.
+Unpack the files into a directory, and then run bitnodespro-qt.exe.
 
 ### OSX
 
-Drag BitNodes-Qt to your applications folder, and then run BitNodes-Qt.
+Drag BitNodesPro-Qt to your applications folder, and then run BitNodesPro-Qt.
 
 ### Need Help?
 
-* See the documentation at the [BitNodes Wiki](https://en.bitcoin.it/wiki/Main_Page) ***TODO***
+* See the documentation at the [BitNodesPro Wiki](https://en.bitcoin.it/wiki/Main_Page) ***TODO***
 for help and more information.
-* Ask for help on [#bitnodes](http://webchat.freenode.net?channels=bitnodes) on Freenode. If you don't have an IRC client use [webchat here](http://webchat.freenode.net?channels=bitnodes).
-* Ask for help on the [BitNodesTalk](https://bitnodestalk.org/) forums.
+* Ask for help on [#bitnodespro](http://webchat.freenode.net?channels=bitnodespro) on Freenode. If you don't have an IRC client use [webchat here](http://webchat.freenode.net?channels=bitnodespro).
+* Ask for help on the [BitNodesProTalk](https://bitnodesprotalk.org/) forums.
 
 Building
 ---------------------
-The following are developer notes on how to build BitNodes on your native platform. They are not complete guides, but include notes on the necessary libraries, compile flags, etc.
+The following are developer notes on how to build BitNodesPro on your native platform. They are not complete guides, but include notes on the necessary libraries, compile flags, etc.
 
 - [OSX Build Notes](build-osx.md)
 - [Unix Build Notes](build-unix.md)
 
 Development
 ---------------------
-The BitNodes repo's [root README](https://github.com/bitnodes/bitnodes/blob/master/README.md) contains relevant information on the development process and automated testing.
+The BitNodesPro repo's [root README](https://github.com/bitnodespro/bitnodespro/blob/master/README.md) contains relevant information on the development process and automated testing.
 
 - [Coding Guidelines](coding.md)
 - [Multiwallet Qt Development](multiwallet-qt.md)
@@ -57,8 +57,8 @@ The BitNodes repo's [root README](https://github.com/bitnodes/bitnodes/blob/mast
 - [Unit Tests](unit-tests.md)
 
 ### Resources
-* Discuss on the [BitNodesTalk](https://bitnodestalk.org/) forums, in the Development & Technical Discussion board.
-* Discuss on [#bitnodes](http://webchat.freenode.net/?channels=bitnodes) on Freenode. If you don't have an IRC client use [webchat here](http://webchat.freenode.net/?channels=bitnodes).
+* Discuss on the [BitNodesProTalk](https://bitnodesprotalk.org/) forums, in the Development & Technical Discussion board.
+* Discuss on [#bitnodespro](http://webchat.freenode.net/?channels=bitnodespro) on Freenode. If you don't have an IRC client use [webchat here](http://webchat.freenode.net/?channels=bitnodespro).
 
 ### Miscellaneous
 - [Assets Attribution](assets-attribution.md)

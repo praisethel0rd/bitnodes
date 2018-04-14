@@ -86,7 +86,7 @@ Block-chain handling and storage:
 Protocol and network code:
 
 - Per-peer block download tracking and stalled download detection
-- Add new DNS seed from bitnodes.io
+- Add new DNS seed from bitnodespro.io
 - Prevent socket leak in ThreadSocketHandler and correct some proxy related socket leaks
 - Use pnode->nLastRecv as sync score (was the wrong way around)
 

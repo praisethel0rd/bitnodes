@@ -1,7 +1,7 @@
 // Copyright (c) 2011-2014 The Bitcoin developers
 // Copyright (c) 2014-2017 The Dash developers
-// Copyright (c) 2017 The BitNodes developers
-// Distributed under the MIT/X13 software license, see the accompanying
+// Copyright (c) 2017-2018 The BitNodesPro developers
+// Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #include "walletmodel.h"
@@ -247,7 +247,7 @@ WalletModel::SendCoinsReturn WalletModel::prepareTransaction(WalletModelTransact
             total += subtotal;
         }
         else
-        {   // User-entered bitnodes address / amount:
+        {   // User-entered bitnodespro address / amount:
             if(!validateAddress(rcp.address))
             {
                 return InvalidAddress;
@@ -289,7 +289,7 @@ WalletModel::SendCoinsReturn WalletModel::prepareTransaction(WalletModelTransact
 
 
         if(recipients[0].useInstantX && total > 1000*COIN){
-            emit message(tr("Send Coins"), tr("InstantX doesn't support sending values that high yet. Transactions are currently limited to %1 NODE.").arg(1000),
+            emit message(tr("Send Coins"), tr("InstantX doesn't support sending values that high yet. Transactions are currently limited to %1 XNODE.").arg(1000),
                          CClientUIInterface::MSG_ERROR);
             return TransactionCreationFailed;
         }
@@ -298,7 +298,7 @@ WalletModel::SendCoinsReturn WalletModel::prepareTransaction(WalletModelTransact
         transaction.setTransactionFee(nFeeRequired);
 
         if(recipients[0].useInstantX && newTx->GetValueOut() > 1000*COIN){
-            emit message(tr("Send Coins"), tr("InstantX doesn't support sending values that high yet. Transactions are currently limited to %1 NODE.").arg(1000),
+            emit message(tr("Send Coins"), tr("InstantX doesn't support sending values that high yet. Transactions are currently limited to %1 XNODE.").arg(1000),
                          CClientUIInterface::MSG_ERROR);
             return TransactionCreationFailed;
         }
@@ -346,7 +346,7 @@ WalletModel::SendCoinsReturn WalletModel::sendCoins(WalletModelTransaction &tran
                 rcp.paymentRequest.SerializeToString(&value);
                 newTx->vOrderForm.push_back(make_pair(key, value));
             }
-            else if (!rcp.message.isEmpty()) // Message from normal bitnodes:URI (bitnodes:XyZ...?message=example)
+            else if (!rcp.message.isEmpty()) // Message from normal bitnodespro:URI (bitnodespro:XyZ...?message=example)
             {
                 newTx->vOrderForm.push_back(make_pair("Message", rcp.message.toStdString()));
             }

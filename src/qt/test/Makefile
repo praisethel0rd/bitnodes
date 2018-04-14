@@ -1,6 +1,6 @@
 all:
-	$(MAKE) -C ../../ test_bitnodes_qt
+	$(MAKE) -C ../../ test_bitnodespro_qt
 clean:
-	$(MAKE) -C ../../ test_bitnodes_qt_clean
+	$(MAKE) -C ../../ test_bitnodespro_qt_clean
 check:
-	$(MAKE) -C ../../ test_bitnodes_qt_check
+	$(MAKE) -C ../../ test_bitnodespro_qt_check

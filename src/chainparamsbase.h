@@ -9,8 +9,8 @@
 #include <vector>
 
 /**
- * CBaseChainParams defines the base parameters (shared between bitnodes-cli and bitnodesd)
- * of a given instance of the BitNodes system.
+ * CBaseChainParams defines the base parameters (shared between bitnodespro-cli and bitnodesprod)
+ * of a given instance of the BitNodesPro system.
  */
 class CBaseChainParams
 {

@@ -60,15 +60,15 @@ bin_PROGRAMS =
 TESTS =
 
 if BUILD_BITCOIND
-  bin_PROGRAMS += bitnodesd
+  bin_PROGRAMS += bitnodesprod
 endif
 
 if BUILD_BITCOIN_UTILS
-  bin_PROGRAMS += bitnodes-cli bitnodes-tx
+  bin_PROGRAMS += bitnodespro-cli bitnodespro-tx
 endif
 
 .PHONY: FORCE
-# bitnodes core #
+# bitnodespro core #
 BITCOIN_CORE_H = \
   activemasternode.h \
   addrman.h \
@@ -169,7 +169,7 @@ obj/build.h: FORCE
 	  $(abs_top_srcdir)
 libbitcoin_util_a-clientversion.$(OBJEXT): obj/build.h
 
-# server: shared between bitnodesd and bitnodes-qt
+# server: shared between bitnodesprod and bitnodespro-qt
 libbitcoin_server_a_CPPFLAGS = $(BITCOIN_INCLUDES) $(MINIUPNPC_CPPFLAGS)
 libbitcoin_server_a_SOURCES = \
   addrman.cpp \
@@ -201,7 +201,7 @@ libbitcoin_server_a_SOURCES = \
   $(JSON_H) \
   $(BITCOIN_CORE_H)
 
-# wallet: shared between bitnodesd and bitnodes-qt, but only linked
+# wallet: shared between bitnodesprod and bitnodespro-qt, but only linked
 # when wallet enabled
 libbitcoin_wallet_a_CPPFLAGS = $(BITCOIN_INCLUDES)
 libbitcoin_wallet_a_SOURCES = \
@@ -248,9 +248,6 @@ crypto_libbitcoin_crypto_a_SOURCES = \
   crypto/shavite.c \
   crypto/simd.c \
   crypto/skein.c \
-  crypto/hamsi.c \
-  crypto/hamsi_helper.c \
-  crypto/fugue.c \
   crypto/common.h \
   crypto/sha256.h \
   crypto/sha512.h \
@@ -270,9 +267,7 @@ crypto_libbitcoin_crypto_a_SOURCES = \
   crypto/sph_shavite.h \
   crypto/sph_simd.h \
   crypto/sph_skein.h \
-  crypto/sph_types.h \
-  crypto/sph_hamsi.h \
-  crypto/sph_fugue.h
+  crypto/sph_types.h
 
 # univalue JSON library
 univalue_libbitcoin_univalue_a_SOURCES = \
@@ -282,7 +277,7 @@ univalue_libbitcoin_univalue_a_SOURCES = \
   univalue/univalue_escapes.h \
   univalue/univalue.h
 
-# common: shared between bitnodesd, and bitnodes-qt and non-server tools
+# common: shared between bitnodesprod, and bitnodespro-qt and non-server tools
 libbitcoin_common_a_CPPFLAGS = $(BITCOIN_INCLUDES)
 libbitcoin_common_a_SOURCES = \
   allocators.cpp \
@@ -336,7 +331,7 @@ libbitcoin_util_a_SOURCES += compat/glibc_compat.cpp
 libbitcoin_util_a_SOURCES += compat/glibcxx_compat.cpp
 endif
 
-# cli: shared between bitnodes-cli and bitnodes-qt
+# cli: shared between bitnodespro-cli and bitnodespro-qt
 libbitcoin_cli_a_CPPFLAGS = $(BITCOIN_INCLUDES)
 libbitcoin_cli_a_SOURCES = \
   rpcclient.cpp \
@@ -346,7 +341,7 @@ nodist_libbitcoin_util_a_SOURCES = $(srcdir)/obj/build.h
 #
 
 # bitcoind binary #
-bitnodesd_LDADD = \
+bitnodesprod_LDADD = \
   $(LIBBITCOIN_SERVER) \
   $(LIBBITCOIN_COMMON) \
   $(LIBBITCOIN_UNIVALUE) \
@@ -357,35 +352,35 @@ bitnodesd_LDADD = \
   $(LIBSECP256K1)
 
 if ENABLE_WALLET
-bitnodesd_LDADD += libbitcoin_wallet.a
+bitnodesprod_LDADD += libbitcoin_wallet.a
 endif
-bitnodesd_SOURCES = bitnodesd.cpp
+bitnodesprod_SOURCES = bitnodesprod.cpp
 #
 
 if TARGET_WINDOWS
-bitnodesd_SOURCES += bitnodesd-res.rc
+bitnodesprod_SOURCES += bitnodesprod-res.rc
 endif
 
-bitnodesd_LDADD += $(BOOST_LIBS) $(BDB_LIBS) $(SSL_LIBS) $(CRYPTO_LIBS) $(MINIUPNPC_LIBS)
-bitnodesd_CPPFLAGS = $(BITCOIN_INCLUDES)
-bitnodesd_LDFLAGS = $(RELDFLAGS) $(AM_LDFLAGS) $(LIBTOOL_APP_LDFLAGS)
+bitnodesprod_LDADD += $(BOOST_LIBS) $(BDB_LIBS) $(SSL_LIBS) $(CRYPTO_LIBS) $(MINIUPNPC_LIBS)
+bitnodesprod_CPPFLAGS = $(BITCOIN_INCLUDES)
+bitnodesprod_LDFLAGS = $(RELDFLAGS) $(AM_LDFLAGS) $(LIBTOOL_APP_LDFLAGS)
 
-# bitnodes-cli binary #
-bitnodes_cli_LDADD = \
+# bitnodespro-cli binary #
+bitnodespro_cli_LDADD = \
   $(LIBBITCOIN_CLI) \
   $(LIBBITCOIN_UTIL) \
   $(BOOST_LIBS) \
   $(SSL_LIBS) \
   $(CRYPTO_LIBS)
 
-bitnodes_cli_SOURCES = \
-  bitnodes-cli.cpp
+bitnodespro_cli_SOURCES = \
+  bitnodespro-cli.cpp
 
-bitnodes_cli_CPPFLAGS = $(BITCOIN_INCLUDES)
+bitnodespro_cli_CPPFLAGS = $(BITCOIN_INCLUDES)
 #
 
-# bitnodes-tx binary #
-bitnodes_tx_LDADD = \
+# bitnodespro-tx binary #
+bitnodespro_tx_LDADD = \
   $(LIBBITCOIN_UNIVALUE) \
   $(LIBBITCOIN_COMMON) \
   $(LIBBITCOIN_UTIL) \
@@ -394,15 +389,15 @@ bitnodes_tx_LDADD = \
   $(BOOST_LIBS) \
   $(CRYPTO_LIBS)
 
-bitnodes_tx_SOURCES = bitnodes-tx.cpp
-bitnodes_tx_CPPFLAGS = $(BITCOIN_INCLUDES)
+bitnodespro_tx_SOURCES = bitnodespro-tx.cpp
+bitnodespro_tx_CPPFLAGS = $(BITCOIN_INCLUDES)
 #
-bitnodes_tx_LDFLAGS = $(RELDFLAGS) $(AM_LDFLAGS) $(LIBTOOL_APP_LDFLAGS)
+bitnodespro_tx_LDFLAGS = $(RELDFLAGS) $(AM_LDFLAGS) $(LIBTOOL_APP_LDFLAGS)
 
 if TARGET_WINDOWS
-bitnodes_cli_SOURCES += bitnodes-cli-res.rc
+bitnodespro_cli_SOURCES += bitnodespro-cli-res.rc
 endif
-bitnodes_cli_LDFLAGS = $(RELDFLAGS) $(AM_LDFLAGS) $(LIBTOOL_APP_LDFLAGS)
+bitnodespro_cli_LDFLAGS = $(RELDFLAGS) $(AM_LDFLAGS) $(LIBTOOL_APP_LDFLAGS)
 
 if BUILD_BITCOIN_LIBS
 include_HEADERS = script/bitcoinconsensus.h

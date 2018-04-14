@@ -1,7 +1,7 @@
 // Copyright (c) 2011-2014 The Bitcoin developers
 // Copyright (c) 2014-2017 The Dash developers
-// Copyright (c) 2017 The BitNodes developers
-// Distributed under the MIT/X13 software license, see the accompanying
+// Copyright (c) 2017-2018 The BitNodesPro developers
+// Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #include "guiutil.h"
@@ -108,7 +108,7 @@ void setupAddressWidget(QValidatedLineEdit *widget, QWidget *parent)
 #if QT_VERSION >= 0x040700
     // We don't want translators to use own addresses in translations
     // and this is the only place, where this address is supplied.
-    widget->setPlaceholderText(QObject::tr("Enter a BitNodes address (e.g. %1)").arg("NeSnpf9Us5mQU56jwYYEv4B4C6wBANfADM"));
+    widget->setPlaceholderText(QObject::tr("Enter a BitNodesPro address (e.g. %1)").arg("NeSnpf9Us5mQU56jwYYEv4B4C6wBANfADM"));
 #endif
     widget->setValidator(new BitcoinAddressEntryValidator(parent));
     widget->setCheckValidator(new BitcoinAddressCheckValidator(parent));
@@ -125,8 +125,8 @@ void setupAmountWidget(QLineEdit *widget, QWidget *parent)
 
 bool parseBitcoinURI(const QUrl &uri, SendCoinsRecipient *out)
 {
-    // return if URI is not valid or is no bitnodes: URI
-    if(!uri.isValid() || uri.scheme() != QString("bitnodes"))
+    // return if URI is not valid or is no bitnodespro: URI
+    if(!uri.isValid() || uri.scheme() != QString("bitnodespro"))
         return false;
 
     SendCoinsRecipient rv;
@@ -166,7 +166,7 @@ bool parseBitcoinURI(const QUrl &uri, SendCoinsRecipient *out)
         {
             if(!i->second.isEmpty())
             {
-                if(!BitcoinUnits::parse(BitcoinUnits::NODE, i->second, &rv.amount))
+                if(!BitcoinUnits::parse(BitcoinUnits::XNODE, i->second, &rv.amount))
                 {
                     return false;
                 }
@@ -186,13 +186,13 @@ bool parseBitcoinURI(const QUrl &uri, SendCoinsRecipient *out)
 
 bool parseBitcoinURI(QString uri, SendCoinsRecipient *out)
 {
-    // Convert bitnodes:// to bitnodes:
+    // Convert bitnodespro:// to bitnodespro:
     //
-    //    Cannot handle this later, because bitnodes:// will cause Qt to see the part after // as host,
+    //    Cannot handle this later, because bitnodespro:// will cause Qt to see the part after // as host,
     //    which will lower-case it (and thus invalidate the address).
-    if(uri.startsWith("bitnodes://", Qt::CaseInsensitive))
+    if(uri.startsWith("bitnodespro://", Qt::CaseInsensitive))
     {
-        uri.replace(0, 7, "bitnodes:");
+        uri.replace(0, 7, "bitnodespro:");
     }
     QUrl uriInstance(uri);
     return parseBitcoinURI(uriInstance, out);
@@ -200,12 +200,12 @@ bool parseBitcoinURI(QString uri, SendCoinsRecipient *out)
 
 QString formatBitcoinURI(const SendCoinsRecipient &info)
 {
-    QString ret = QString("bitnodes:%1").arg(info.address);
+    QString ret = QString("bitnodespro:%1").arg(info.address);
     int paramCount = 0;
 
     if (info.amount)
     {
-        ret += QString("?amount=%1").arg(BitcoinUnits::format(BitcoinUnits::NODE, info.amount, false, BitcoinUnits::separatorNever));
+        ret += QString("?amount=%1").arg(BitcoinUnits::format(BitcoinUnits::XNODE, info.amount, false, BitcoinUnits::separatorNever));
         paramCount++;
     }
 
@@ -393,7 +393,7 @@ void openConfigfile()
 {
     boost::filesystem::path pathConfig = GetConfigFile();
 
-    /* Open bitnodes.conf with the associated application */
+    /* Open bitnodespro.conf with the associated application */
     if (boost::filesystem::exists(pathConfig))
         QDesktopServices::openUrl(QUrl::fromLocalFile(boostPathToQString(pathConfig)));
 }
@@ -584,12 +584,12 @@ TableViewLastColumnResizingFixer::TableViewLastColumnResizingFixer(QTableView* t
 #ifdef WIN32
 boost::filesystem::path static StartupShortcutPath()
 {
-    return GetSpecialFolderPath(CSIDL_STARTUP) / "BitNodes.lnk";
+    return GetSpecialFolderPath(CSIDL_STARTUP) / "BitNodesPro.lnk";
 }
 
 bool GetStartOnSystemStartup()
 {
-    // check for BitNodes.lnk
+    // check for BitNodesPro.lnk
     return boost::filesystem::exists(StartupShortcutPath());
 }
 
@@ -666,7 +666,7 @@ boost::filesystem::path static GetAutostartDir()
 
 boost::filesystem::path static GetAutostartFilePath()
 {
-    return GetAutostartDir() / "bitnodes.desktop";
+    return GetAutostartDir() / "bitnodespro.desktop";
 }
 
 bool GetStartOnSystemStartup()
@@ -704,10 +704,10 @@ bool SetStartOnSystemStartup(bool fAutoStart)
         boost::filesystem::ofstream optionFile(GetAutostartFilePath(), std::ios_base::out|std::ios_base::trunc);
         if (!optionFile.good())
             return false;
-        // Write a bitnodes.desktop file to the autostart directory:
+        // Write a bitnodespro.desktop file to the autostart directory:
         optionFile << "[Desktop Entry]\n";
         optionFile << "Type=Application\n";
-        optionFile << "Name=BitNodes\n";
+        optionFile << "Name=BitNodesPro\n";
         optionFile << "Exec=" << pszExePath << " -min\n";
         optionFile << "Terminal=false\n";
         optionFile << "Hidden=false\n";
@@ -726,7 +726,7 @@ bool SetStartOnSystemStartup(bool fAutoStart)
 LSSharedFileListItemRef findStartupItemInList(LSSharedFileListRef list, CFURLRef findUrl);
 LSSharedFileListItemRef findStartupItemInList(LSSharedFileListRef list, CFURLRef findUrl)
 {
-    // loop through the list of startup items and try to find the bitnodes app
+    // loop through the list of startup items and try to find the bitnodespro app
     CFArrayRef listSnapshot = LSSharedFileListCopySnapshot(list, NULL);
     for(int i = 0; i < CFArrayGetCount(listSnapshot); i++) {
         LSSharedFileListItemRef item = (LSSharedFileListItemRef)CFArrayGetValueAtIndex(listSnapshot, i);
@@ -760,7 +760,7 @@ bool SetStartOnSystemStartup(bool fAutoStart)
     LSSharedFileListItemRef foundItem = findStartupItemInList(loginItems, bitcoinAppUrl);
 
     if(fAutoStart && !foundItem) {
-        // add bitnodes app to startup item list
+        // add bitnodespro app to startup item list
         LSSharedFileListInsertItemURL(loginItems, kLSSharedFileListItemBeforeFirst, NULL, NULL, bitcoinAppUrl, NULL, NULL);
     }
     else if(!fAutoStart && foundItem) {

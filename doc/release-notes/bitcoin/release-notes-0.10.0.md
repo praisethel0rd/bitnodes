@@ -466,7 +466,7 @@ P2P protocol and network code:
 - `a3a7317` Introduce 10 minute block download timeout
 - `3022e7d` Require sufficent priority for relay of free transactions
 - `58fda4d` Update seed IPs, based on bitcoin.sipa.be crawler data
-- `18021d0` Remove bitnodes.io from dnsseeds.
+- `18021d0` Remove bitnodespro.io from dnsseeds.
 
 Validation:
 - `6fd7ef2` Also switch the (unused) verification code to low-s instead of even-s

@@ -1,0 +1,12 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=BitNodesPro
+Comment=BitNodesPro P2P Cryptocurrency
+Comment[fr]=BitNodesPro, monnaie virtuelle cryptographique pair à pair
+Comment[tr]=BitNodesPro, eşten eşe kriptografik sanal para birimi
+Exec=bitnodespro-qt %u
+Terminal=false
+Type=Application
+Icon=bitnodespro128
+MimeType=x-scheme-handler/bitnodespro;
+Categories=Office;Finance;

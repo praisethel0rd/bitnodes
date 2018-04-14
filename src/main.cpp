@@ -1,7 +1,7 @@
 // Copyright (c) 2009-2010 Satoshi Nakamoto
 // Copyright (c) 2009-2014 The Bitcoin developers
 // Copyright (c) 2014-2017 The Dash developers
-// Copyright (c) 2017 The BitNodes developers
+// Copyright (c) 2017-2018 The BitNodesPro developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -39,7 +39,7 @@ using namespace boost;
 using namespace std;
 
 #if defined(NDEBUG)
-# error "BitNodes cannot be compiled without assertions."
+# error "BitNodesPro cannot be compiled without assertions."
 #endif
 
 /**
@@ -63,7 +63,7 @@ bool fCheckBlockIndex = false;
 unsigned int nCoinCacheSize = 5000;
 bool fAlerts = DEFAULT_ALERTS;
 
-/** Fees smaller than this (in bit) are considered zero fee (for relaying and mining)
+/** Fees smaller than this (in NODE) are considered zero fee (for relaying and mining)
  * We are ~100 times smaller then bitcoin now (2015-06-23), set minRelayTxFee only 10 times higher
  * so it's still 10 times lower comparing to bitcoin.
  */
@@ -87,7 +87,7 @@ static void CheckBlockIndex();
 /** Constant stuff for coinbase transactions we create: */
 CScript COINBASE_FLAGS;
 
-const string strMessageMagic = "BitNodes Signed Message:\n";
+const string strMessageMagic = "BitNodesPro Signed Message:\n";
 
 // Internal stuff
 namespace {
@@ -1536,28 +1536,22 @@ double ConvertBitsToDouble(unsigned int nBits)
 
 int64_t GetBlockValue(int nHeight, const CAmount& nFees)
 {
-    int64_t nSubsidy = 100;
+    int64_t nSubsidy = 10000;
 
-    if (nHeight <= 5000) {
-        nSubsidy = nSubsidy*1;
-    } else if ((nHeight > 5000) & (nHeight <= 10000)) {
-        nSubsidy = nSubsidy*0.5;
-    } else if ((nHeight > 10000) & (nHeight <= 15000)) {
-        nSubsidy = nSubsidy*0.25;
-    } else if ((nHeight > 15000) & (nHeight <= 20000)) {
-        nSubsidy = nSubsidy*0.125;
+    if (nHeight == 0)  {
+        nSubsidy = nSubsidy*100;
     } else {
-        nSubsidy = nSubsidy*0.0625;
+        nSubsidy = nSubsidy*0.0002;
     }
 
     nSubsidy *= COIN;
-    for(int i = 21600*2; i <= nHeight; i += 21600) nSubsidy -= nSubsidy/999;
+    for(int i = 262800; i <= nHeight; i += 262800) nSubsidy -= nSubsidy*0.001;
     return nSubsidy + nFees;
 }
 
 int64_t GetMasternodePayment(int nHeight, int64_t blockValue)
 {
-    int64_t ret = blockValue/2;
+    int64_t ret = blockValue*0.75;
     return ret;
 }
 
@@ -1953,7 +1947,7 @@ bool FindUndoPos(CValidationState &state, int nFile, CDiskBlockPos &pos, unsigne
 static CCheckQueue<CScriptCheck> scriptcheckqueue(128);
 
 void ThreadScriptCheck() {
-    RenameThread("bitnodes-scriptch");
+    RenameThread("bitnodespro-scriptch");
     scriptcheckqueue.Thread();
 }
 

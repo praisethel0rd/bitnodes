@@ -1,34 +1,34 @@
-BitNodes Core staging tree
-===============================
+BitNodesPro Core staging tree
+=============================
 
 Copyright (c) 2009-2017 Bitcoin Core Developers
 
 Copyright (c) 2014-2017 Dash Core Developers
 
-Copyright (c) 2017 BitNodes Core Developers
+Copyright (c) 2017-2018 BitNodes Project Developers
 
 
-What is BitNodes?
-----------------
+What is BitNodesPro?
+--------------------
 
-BitNodes is an experimental digital currency that enables anonymous, instant
-payments to anyone, anywhere in the world. BitNodes uses peer-to-peer technology
+BitNodesPro is an experimental digital currency that enables anonymous, instant
+payments to anyone, anywhere in the world. BitNodesPro uses peer-to-peer technology
 to operate with no central authority: managing transactions and issuing money
-are carried out collectively by the network. BitNodes Core is the name of open
+are carried out collectively by the network. BitNodesPro Core is the name of open
 source software which enables the use of this currency.
 
 
 License
 -------
 
-BitNodes Core is released under the terms of the MIT license. See [COPYING](COPYING) for more
+BitNodesPro Core is released under the terms of the MIT license. See [COPYING](COPYING) for more
 information or see http://opensource.org/licenses/MIT.
 
 
 Building process
 -----------------
 
-**compiling BitNodes from git**
+**compiling BitNodesPro from git**
 
 Use the autogen script to prepare the build environment.
 
@@ -60,7 +60,7 @@ to see it.
 
 **testnet and regtest modes**
 
-Run with the -testnet option to run with "play bitnodes" on the test network, if you
+Run with the -testnet option to run with "play bitnodespro" on the test network, if you
 are testing multi-machine code that needs to operate across the internet.
 
 If you are testing something that can run on one machine, run with the -regtest option.
@@ -69,7 +69,7 @@ that run in -regtest mode.
 
 **DEBUG_LOCKORDER**
 
-BitNodes Core is a multithreaded application, and deadlocks or other multithreading bugs
+BitNodesPro Core is a multithreaded application, and deadlocks or other multithreading bugs
 can be very difficult to track down. Compiling with -DDEBUG_LOCKORDER (configure
 CXXFLAGS="-DDEBUG_LOCKORDER -g") inserts run-time checks to keep track of what locks
 are held, and adds warning to the debug.log file if inconsistencies are detected.

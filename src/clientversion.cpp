@@ -10,10 +10,10 @@
 
 /**
  * Name of client reported in the 'version' message. Report the same name
- * for both bitnodesd and bitnodes-qt, to make it harder for attackers to
+ * for both bitnodesprod and bitnodespro-qt, to make it harder for attackers to
  * target servers or GUI users specifically.
  */
-const std::string CLIENT_NAME("BitNodes Core");
+const std::string CLIENT_NAME("BitNodesPro Core");
 
 /**
  * Client version number

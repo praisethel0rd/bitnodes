@@ -7,7 +7,7 @@
 #include "masternodeconfig.h"
 
 //
-// Bootup the Masternode, look for a 1000NODE input and register on the network
+// Bootup the Masternode, look for a 10000 XNODE input and register on the network
 //
 void CActiveMasternode::ManageStatus()
 {    
@@ -64,13 +64,13 @@ void CActiveMasternode::ManageStatus()
         }
 
         if(Params().NetworkID() == CBaseChainParams::MAIN) {
-            if(service.GetPort() != 7227) {
-                notCapableReason = strprintf("Invalid port: %u - only 7227 is supported on mainnet.", service.GetPort());
+            if(service.GetPort() != 2632) {
+                notCapableReason = strprintf("Invalid port: %u - only 2632 is supported on mainnet.", service.GetPort());
                 LogPrintf("CActiveMasternode::ManageStatus() - not capable: %s\n", notCapableReason);
                 return;
             }
-        } else if(service.GetPort() == 7227) {
-            notCapableReason = strprintf("Invalid port: %u - 7227 is only supported on mainnet.", service.GetPort());
+        } else if(service.GetPort() == 2632) {
+            notCapableReason = strprintf("Invalid port: %u - 2632 is only supported on mainnet.", service.GetPort());
             LogPrintf("CActiveMasternode::ManageStatus() - not capable: %s\n", notCapableReason);
             return;
         }
@@ -231,13 +231,13 @@ bool CActiveMasternode::Register(std::string strService, std::string strKeyMaste
 
     CService service = CService(strService);
     if(Params().NetworkID() == CBaseChainParams::MAIN) {
-        if(service.GetPort() != 7227) {
-            errorMessage = strprintf("Invalid port %u for masternode %s - only 7227 is supported on mainnet.", service.GetPort(), strService);
+        if(service.GetPort() != 2632) {
+            errorMessage = strprintf("Invalid port %u for masternode %s - only 2632 is supported on mainnet.", service.GetPort(), strService);
             LogPrintf("CActiveMasternode::Register() - %s\n", errorMessage);
             return false;
         }
-    } else if(service.GetPort() == 7227) {
-        errorMessage = strprintf("Invalid port %u for masternode %s - 7227 is only supported on mainnet.", service.GetPort(), strService);
+    } else if(service.GetPort() == 2632) {
+        errorMessage = strprintf("Invalid port %u for masternode %s - 2632 is only supported on mainnet.", service.GetPort(), strService);
         LogPrintf("CActiveMasternode::Register() - %s\n", errorMessage);
         return false;
     }
@@ -386,7 +386,7 @@ vector<COutput> CActiveMasternode::SelectCoinsMasternode()
     // Filter
     BOOST_FOREACH(const COutput& out, vCoins)
     {
-        if(out.tx->vout[out.i].nValue == 1000*COIN) { //exactly
+        if(out.tx->vout[out.i].nValue == 10000*COIN) { //exactly
             filteredCoins.push_back(out);
         }
     }

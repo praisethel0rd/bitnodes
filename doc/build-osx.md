@@ -1,6 +1,6 @@
 Mac OS X Build Instructions and Notes
 ====================================
-This guide will show you how to build bitnodesd (headless client) for OSX.
+This guide will show you how to build bitnodesprod (headless client) for OSX.
 
 Notes
 -----
@@ -58,19 +58,19 @@ The rest of these commands are run inside brew interactive mode:
 /private/tmp/berkeley-db4-UGpd0O $ exit
 ```
 
-After exiting, you'll get a warning that the install is keg-only, which means it wasn't symlinked to `/usr/local`.  You don't need it to link it to build bitnodes, but if you want to, here's how:
+After exiting, you'll get a warning that the install is keg-only, which means it wasn't symlinked to `/usr/local`.  You don't need it to link it to build bitnodespro, but if you want to, here's how:
 
     $ brew link --force berkeley-db4
 
 
-### Building `bitnodesd`
+### Building `bitnodesprod`
 
 1. Clone the github tree to get the source code and go into the directory.
 
-        git clone https://github.com/bitnodes/bitnodes.git
-        cd bitnodes
+        git clone https://github.com/bitnodespro/bitnodespro.git
+        cd bitnodespro
 
-2.  Build bitnodesd:
+2.  Build bitnodesprod:
 
         ./autogen.sh
         ./configure
@@ -80,7 +80,7 @@ After exiting, you'll get a warning that the install is keg-only, which means it
 
         make check
 
-4.  (Optional) You can also install bitnodesd to your path:
+4.  (Optional) You can also install bitnodesprod to your path:
 
         make install
 
@@ -92,7 +92,7 @@ Download Qt Creator from http://www.qt.io/download/. Download the "community edi
 1. Make sure you installed everything through homebrew mentioned above 
 2. Do a proper ./configure --with-gui=qt5 --enable-debug
 3. In Qt Creator do "New Project" -> Import Project -> Import Existing Project
-4. Enter "bitnodes-qt" as project name, enter src/qt as location
+4. Enter "bitnodespro-qt" as project name, enter src/qt as location
 5. Leave the file selection as it is
 6. Confirm the "summary page"
 7. In the "Projects" tab select "Manage Kits..."
@@ -102,11 +102,11 @@ Download Qt Creator from http://www.qt.io/download/. Download the "community edi
 
 Creating a release build
 ------------------------
-You can ignore this section if you are building `bitnodesd` for your own use.
+You can ignore this section if you are building `bitnodesprod` for your own use.
 
-bitnodesd/bitnodes-cli binaries are not included in the BitNodes-Qt.app bundle.
+bitnodesprod/bitnodespro-cli binaries are not included in the BitNodesPro-Qt.app bundle.
 
-If you are building `bitnodesd` or `BitNodes-Qt` for others, your build machine should be set up
+If you are building `bitnodesprod` or `BitNodesPro-Qt` for others, your build machine should be set up
 as follows for maximum compatibility:
 
 All dependencies should be compiled with these flags:
@@ -115,30 +115,30 @@ All dependencies should be compiled with these flags:
  -arch x86_64
  -isysroot $(xcode-select --print-path)/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.7.sdk
 
-Once dependencies are compiled, see release-process.md for how the BitNodes-Qt.app
+Once dependencies are compiled, see release-process.md for how the BitNodesPro-Qt.app
 bundle is packaged and signed to create the .dmg disk image that is distributed.
 
 Running
 -------
 
-It's now available at `./bitnodesd`, provided that you are still in the `src`
+It's now available at `./bitnodesprod`, provided that you are still in the `src`
 directory. We have to first create the RPC configuration file, though.
 
-Run `./bitnodesd` to get the filename where it should be put, or just try these
+Run `./bitnodesprod` to get the filename where it should be put, or just try these
 commands:
 
-    echo -e "rpcuser=bitnodesrpc\nrpcpassword=$(xxd -l 16 -p /dev/urandom)" > "/Users/${USER}/Library/Application Support/BitNodes/bitnodes.conf"
-    chmod 600 "/Users/${USER}/Library/Application Support/BitNodes/bitnodes.conf"
+    echo -e "rpcuser=bitnodesprorpc\nrpcpassword=$(xxd -l 16 -p /dev/urandom)" > "/Users/${USER}/Library/Application Support/BitNodesPro/bitnodespro.conf"
+    chmod 600 "/Users/${USER}/Library/Application Support/BitNodesPro/bitnodespro.conf"
 
 The next time you run it, it will start downloading the blockchain, but it won't
 output anything while it's doing this. This process may take several hours;
 you can monitor its process by looking at the debug.log file, like this:
 
-    tail -f $HOME/Library/Application\ Support/BitNodes/debug.log
+    tail -f $HOME/Library/Application\ Support/BitNodesPro/debug.log
 
 Other commands:
 -------
 
-    ./bitnodesd -daemon # to start the bitnodes daemon.
-    ./bitnodes-cli --help  # for a list of command-line options.
-    ./bitnodes-cli help    # When the daemon is running, to get a list of RPC commands
+    ./bitnodesprod -daemon # to start the bitnodespro daemon.
+    ./bitnodespro-cli --help  # for a list of command-line options.
+    ./bitnodespro-cli help    # When the daemon is running, to get a list of RPC commands

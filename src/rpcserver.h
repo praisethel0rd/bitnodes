@@ -93,7 +93,7 @@ public:
 };
 
 /**
- * BitNodes RPC command dispatcher.
+ * BitNodesPro RPC command dispatcher.
  */
 class CRPCTable
 {

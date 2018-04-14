@@ -1,7 +1,7 @@
 // Copyright (c) 2009-2010 Satoshi Nakamoto
 // Copyright (c) 2009-2014 The Bitcoin developers
 // Copyright (c) 2014-2017 The Dash developers
-// Copyright (c) 2017 The BitNodes developers
+// Copyright (c) 2017-2018 The BitNodesPro developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -25,8 +25,6 @@
 #include "crypto/sph_shavite.h"
 #include "crypto/sph_simd.h"
 #include "crypto/sph_echo.h"
-#include "crypto/sph_hamsi.h"
-#include "crypto/sph_fugue.h"
 
 #include <vector>
 
@@ -71,8 +69,6 @@ GLOBAL sph_cubehash512_context  z_cubehash;
 GLOBAL sph_shavite512_context   z_shavite;
 GLOBAL sph_simd512_context      z_simd;
 GLOBAL sph_echo512_context      z_echo;
-GLOBAL sph_hamsi512_context     z_hamsi;
-GLOBAL sph_fugue512_context     z_fugue;
 
 #define fillz() do { \
     sph_blake512_init(&z_blake); \
@@ -86,8 +82,6 @@ GLOBAL sph_fugue512_context     z_fugue;
     sph_shavite512_init(&z_shavite); \
     sph_simd512_init(&z_simd); \
     sph_echo512_init(&z_echo); \
-    sph_hamsi512_init(&z_hamsi); \
-    sph_fugue512_init(&z_fugue); \
 } while (0)
 
 #define ZBLAKE (memcpy(&ctx_blake, &z_blake, sizeof(z_blake)))
@@ -96,8 +90,6 @@ GLOBAL sph_fugue512_context     z_fugue;
 #define ZJH (memcpy(&ctx_jh, &z_jh, sizeof(z_jh)))
 #define ZKECCAK (memcpy(&ctx_keccak, &z_keccak, sizeof(z_keccak)))
 #define ZSKEIN (memcpy(&ctx_skein, &z_skein, sizeof(z_skein)))
-#define ZHAMSI (memcpy(&ctx_hamsi, &z_hamsi, sizeof(z_hamsi)))
-#define ZFUGUE (memcpy(&ctx_fugue, &z_fugue, sizeof(z_fugue)))
 
 /* ----------- Bitcoin Hash ------------------------------------------------- */
 /** A hasher class for Bitcoin's 160-bit hash (SHA-256 + RIPEMD-160). */
@@ -281,9 +273,9 @@ void BIP32Hash(const unsigned char chainCode[32], unsigned int nChild, unsigned 
 //int HMAC_SHA512_Update(HMAC_SHA512_CTX *pctx, const void *pdata, size_t len);
 //int HMAC_SHA512_Final(unsigned char *pmd, HMAC_SHA512_CTX *pctx);
 
-/* ----------- BitNodes Hash ------------------------------------------------ */
+/* ----------- BitNodesPro ---------------------------------------------- */
 template<typename T1>
-inline uint256 HashX13(const T1 pbegin, const T1 pend)
+inline uint256 HashX11(const T1 pbegin, const T1 pend)
 
 {
     sph_blake512_context     ctx_blake;
@@ -297,16 +289,14 @@ inline uint256 HashX13(const T1 pbegin, const T1 pend)
     sph_shavite512_context   ctx_shavite;
     sph_simd512_context      ctx_simd;
     sph_echo512_context      ctx_echo;
-    sph_hamsi512_context     ctx_hamsi;
-    sph_fugue512_context     ctx_fugue;
     static unsigned char pblank[1];
 
-    uint512 hash[17];
+    uint512 hash[11];
 
     sph_blake512_init(&ctx_blake);
     sph_blake512 (&ctx_blake, (pbegin == pend ? pblank : static_cast<const void*>(&pbegin[0])), (pend - pbegin) * sizeof(pbegin[0]));
     sph_blake512_close(&ctx_blake, static_cast<void*>(&hash[0]));
-    
+
     sph_bmw512_init(&ctx_bmw);
     sph_bmw512 (&ctx_bmw, static_cast<const void*>(&hash[0]), 64);
     sph_bmw512_close(&ctx_bmw, static_cast<void*>(&hash[1]));
@@ -318,11 +308,11 @@ inline uint256 HashX13(const T1 pbegin, const T1 pend)
     sph_skein512_init(&ctx_skein);
     sph_skein512 (&ctx_skein, static_cast<const void*>(&hash[2]), 64);
     sph_skein512_close(&ctx_skein, static_cast<void*>(&hash[3]));
-    
+
     sph_jh512_init(&ctx_jh);
     sph_jh512 (&ctx_jh, static_cast<const void*>(&hash[3]), 64);
     sph_jh512_close(&ctx_jh, static_cast<void*>(&hash[4]));
-    
+
     sph_keccak512_init(&ctx_keccak);
     sph_keccak512 (&ctx_keccak, static_cast<const void*>(&hash[4]), 64);
     sph_keccak512_close(&ctx_keccak, static_cast<void*>(&hash[5]));
@@ -330,15 +320,15 @@ inline uint256 HashX13(const T1 pbegin, const T1 pend)
     sph_luffa512_init(&ctx_luffa);
     sph_luffa512 (&ctx_luffa, static_cast<void*>(&hash[5]), 64);
     sph_luffa512_close(&ctx_luffa, static_cast<void*>(&hash[6]));
-    
+
     sph_cubehash512_init(&ctx_cubehash);
     sph_cubehash512 (&ctx_cubehash, static_cast<const void*>(&hash[6]), 64);
     sph_cubehash512_close(&ctx_cubehash, static_cast<void*>(&hash[7]));
-    
+
     sph_shavite512_init(&ctx_shavite);
     sph_shavite512(&ctx_shavite, static_cast<const void*>(&hash[7]), 64);
     sph_shavite512_close(&ctx_shavite, static_cast<void*>(&hash[8]));
-        
+
     sph_simd512_init(&ctx_simd);
     sph_simd512 (&ctx_simd, static_cast<const void*>(&hash[8]), 64);
     sph_simd512_close(&ctx_simd, static_cast<void*>(&hash[9]));
@@ -347,16 +337,7 @@ inline uint256 HashX13(const T1 pbegin, const T1 pend)
     sph_echo512 (&ctx_echo, static_cast<const void*>(&hash[9]), 64);
     sph_echo512_close(&ctx_echo, static_cast<void*>(&hash[10]));
 
-    sph_hamsi512_init(&ctx_hamsi);
-    sph_hamsi512 (&ctx_hamsi, static_cast<const void*>(&hash[10]), 64);
-    sph_hamsi512_close(&ctx_hamsi, static_cast<void*>(&hash[11]));
-
-    sph_fugue512_init(&ctx_fugue);
-    sph_fugue512 (&ctx_fugue, static_cast<const void*>(&hash[11]), 64);
-    sph_fugue512_close(&ctx_fugue, static_cast<void*>(&hash[12]));
-
-
-    return hash[12].trim256();
+    return hash[10].trim256();
 }
 
 #endif // BITCOIN_HASH_H

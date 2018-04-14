@@ -1,6 +1,6 @@
 // Copyright (c) 2009-2012 The Dash developers
-// Copyright (c) 2017 The BitNodes developers
-// Distributed under the MIT/X13 software license, see the accompanying
+// Copyright (c) 2017-2018 The BitNodesPro developers
+// Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 #ifndef INSTANTX_H
 #define INSTANTX_H
@@ -22,7 +22,7 @@ class CConsensusVote;
 class CTransaction;
 class CTransactionLock;
 
-static const int MIN_INSTANTX_PROTO_VERSION = 71717;
+static const int MIN_INSTANTX_PROTO_VERSION = 80001;
 
 extern map<uint256, CTransaction> mapTxLockReq;
 extern map<uint256, CTransaction> mapTxLockReqRejected;

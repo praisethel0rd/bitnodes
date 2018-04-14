@@ -1,6 +1,6 @@
 // Copyright (c) 2012-2014 The Bitcoin developers
 // Copyright (c) 2014-2017 The Dash developers
-// Copyright (c) 2017 The BitNodes developers
+// Copyright (c) 2017-2018 The BitNodesPro developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -11,31 +11,31 @@
  * network protocol versioning
  */
 
-static const int PROTOCOL_VERSION = 71717;
+static const int PROTOCOL_VERSION = 80001;
 
 //! initial proto version, to be increased after version/verack negotiation
 static const int INIT_PROTO_VERSION = 209;
 
 //! In this version, 'getheaders' was introduced.
-static const int GETHEADERS_VERSION = 71711;
+static const int GETHEADERS_VERSION = 80000;
 
 //! disconnect from peers older than this proto version
-static const int MIN_PEER_PROTO_VERSION = 71711;
+static const int MIN_PEER_PROTO_VERSION = 80000;
 
 //! minimum peer version accepted by DarksendPool
-static const int MIN_POOL_PEER_PROTO_VERSION = 71717;
+static const int MIN_POOL_PEER_PROTO_VERSION = 80001;
 
 //! minimum peer version for masternode budgets
-static const int MIN_BUDGET_PEER_PROTO_VERSION = 71717;
+static const int MIN_BUDGET_PEER_PROTO_VERSION = 80001;
 
 //! minimum peer version for masternode winner broadcasts
-static const int MIN_MNW_PEER_PROTO_VERSION = 71717;
+static const int MIN_MNW_PEER_PROTO_VERSION = 80001;
 
 //! minimum peer version that can receive masternode payments
 // V1 - Last protocol version before update
 // V2 - Newest protocol version
-static const int MIN_MASTERNODE_PAYMENT_PROTO_VERSION_1 = 71711;
-static const int MIN_MASTERNODE_PAYMENT_PROTO_VERSION_2 = 71717;
+static const int MIN_MASTERNODE_PAYMENT_PROTO_VERSION_1 = 80000;
+static const int MIN_MASTERNODE_PAYMENT_PROTO_VERSION_2 = 80001;
 
 //! nTime field added to CAddress, starting with this version;
 //! if possible, avoid requesting addresses nodes older than this

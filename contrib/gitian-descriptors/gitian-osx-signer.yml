@@ -1,5 +1,5 @@
 ---
-name: "bitnodes-dmg-signer"
+name: "bitnodespro-dmg-signer"
 suites:
 - "precise"
 architectures:
@@ -10,7 +10,7 @@ packages:
 reference_datetime: "2017-12-12 00:00:00"
 remotes: []
 files:
-- "bitnodes-osx-unsigned.tar.gz"
+- "bitnodespro-osx-unsigned.tar.gz"
 - "signature.tar.gz"
 script: |
   WRAP_DIR=$HOME/wrapped
@@ -28,10 +28,10 @@ script: |
     chmod +x ${WRAP_DIR}/${prog}
   done
 
-  UNSIGNED=bitnodes-osx-unsigned.tar.gz
-  SIGNED=bitnodes-osx-signed.dmg
+  UNSIGNED=bitnodespro-osx-unsigned.tar.gz
+  SIGNED=bitnodespro-osx-signed.dmg
 
   tar -xf ${UNSIGNED}
   ./detached-sig-apply.sh ${UNSIGNED} signature.tar.gz
-  ${WRAP_DIR}/genisoimage -no-cache-inodes -D -l -probe -V "BitNodes-Qt" -no-pad -r -apple -o uncompressed.dmg signed-app
+  ${WRAP_DIR}/genisoimage -no-cache-inodes -D -l -probe -V "BitNodesPro-Qt" -no-pad -r -apple -o uncompressed.dmg signed-app
   ${WRAP_DIR}/dmg dmg uncompressed.dmg ${OUTDIR}/${SIGNED}

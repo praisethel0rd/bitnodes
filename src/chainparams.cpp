@@ -1,7 +1,7 @@
 // Copyright (c) 2010 Satoshi Nakamoto
 // Copyright (c) 2009-2014 The Bitcoin developers
 // Copyright (c) 2014-2017 The Dash developers
-// Copyright (c) 2017 The BitNodes developers
+// Copyright (c) 2017-2018 The BitNodesPro developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -45,18 +45,18 @@ static void convertSeed6(std::vector<CAddress> &vSeedsOut, const SeedSpec6 *data
 
 static Checkpoints::MapCheckpoints mapCheckpoints =
         boost::assign::map_list_of
-        (  0, uint256("0x0000086bc1314567c516c7a39573968880d1a754e36f3c69deba80c641d7b219"))
+        (  0, uint256("0x00000281c9b573da3042ebcd6784369a55674e58b4bc222cef90815d75b54c2b"))
         ;
 static const Checkpoints::CCheckpointData data = {
-        &mapCheckpoints, 1514278800, 0, 2800
+        &mapCheckpoints, 1516946400, 0, 2800
     };
 
 static Checkpoints::MapCheckpoints mapCheckpointsTestnet =
         boost::assign::map_list_of
-        ( 0, uint256("0x000007504bdfef474b55203dd990645408eb0a9a3c4ba222570dfdd656819fde"))
+        ( 0, uint256("0x000005792f3627994a810db8ec6ce9127c16ecf59f5a9af888ad4fcf64b6c984"))
         ;
 static const Checkpoints::CCheckpointData dataTestnet = {
-        &mapCheckpointsTestnet, 1517443200, 0, 500
+        &mapCheckpointsTestnet, 1519884000, 0, 500
     };
 
 static Checkpoints::MapCheckpoints mapCheckpointsRegtest =
@@ -77,46 +77,46 @@ public:
         pchMessageStart[1] = 0xfe;
         pchMessageStart[2] = 0x6b;
         pchMessageStart[3] = 0xbd;
-        vAlertPubKey = ParseHex("0466b6916465661ad39d2bc298058b9229fc34e50b87532bbf580c282bcba78b2e8b8d99897121e2fef51c2274bb57fffc172fab75171d2ca82c91feaf60efe1e0");
-        nDefaultPort = 7227;
-        bnProofOfWorkLimit = ~uint256(0) >> 20;  // BitNodes starting difficulty is 1 / 2^12
-        nSubsidyHalvingInterval = 21600;
+        vAlertPubKey = ParseHex("042129cdbe7ba51e95fafc201c286a08f0ca5dde345cfbfcd6f7513c9d006cd6e1470de7855672547978d7fa27d9d14bd2808feb923d91bdd73b37373e6f6b417a");
+        nDefaultPort = 2632;
+        bnProofOfWorkLimit = ~uint256(0) >> 20;  // BitNodesPro starting difficulty is 1 / 2^12
+        nSubsidyHalvingInterval = 262800;
         nEnforceBlockUpgradeMajority = 750;
         nRejectBlockOutdatedMajority = 950;
         nToCheckBlockUpgradeMajority = 1000;
         nMinerThreads = 0;
-        nTargetTimespan = 24 * 60 * 60; // BitNodes: 1 day
-        nTargetSpacing = 2 * 60; // BitNodes: 2 minutes
+        nTargetTimespan = 24 * 60 * 60; // BitNodesPro: 1 day
+        nTargetSpacing = 2 * 60; // BitNodesPro: 2 minutes
 
 
-        const char* pszTimestamp = "The Beatles. I Want to Hold Your Hand 12/26/2017@9/00am UTC";
+        const char* pszTimestamp = "1998 Intel launches 333 MHz Pentium II chip";
         CMutableTransaction txNew;
         txNew.vin.resize(1);
         txNew.vout.resize(1);
         txNew.vin[0].scriptSig = CScript() << 486604799 << CScriptNum(4) << vector<unsigned char>((const unsigned char*)pszTimestamp, (const unsigned char*)pszTimestamp + strlen(pszTimestamp));
         txNew.vout[0].nValue = 50 * COIN;
-        txNew.vout[0].scriptPubKey = CScript() << ParseHex("040f084712e3c7cb08a5086e49ef8627c801f1e2d42325a4a0274f98bca6d4a773769c8f1d4c9e1f993f7ad4d75aa2fc24b72a6365715b88746b8f41870e4ca192") << OP_CHECKSIG;
+        txNew.vout[0].scriptPubKey = CScript() << ParseHex("04e5329e7170dc698e5960ac470ff1b4731c3650b452d29748223fd931aeed8d116b808ffdbeaba7813c4e63fffb4eeee88ea4d5c119083debb47e5c5003293128") << OP_CHECKSIG;
         genesis.vtx.push_back(txNew);
         genesis.hashPrevBlock = 0;
         genesis.hashMerkleRoot = genesis.BuildMerkleTree();
         genesis.nVersion = 1;
         
-        genesis.nTime    = 1514278800;
+        genesis.nTime    = 1516946400;
         genesis.nBits    = 0x1e0ffff0;
-        genesis.nNonce   = 117134;
+        genesis.nNonce   = 2073493;
 
         hashGenesisBlock = genesis.GetHash();
-        assert(hashGenesisBlock == uint256("0x0000086bc1314567c516c7a39573968880d1a754e36f3c69deba80c641d7b219"));
-        assert(genesis.hashMerkleRoot == uint256("0xf6df48aafc6ff3f80098859550903dccd85a301c7b77eaac5a4dc3f498383496"));
+        assert(hashGenesisBlock == uint256("0x00000281c9b573da3042ebcd6784369a55674e58b4bc222cef90815d75b54c2b"));
+        assert(genesis.hashMerkleRoot == uint256("0xab182f4f121dd0986e60d73e95d87b6867d954113403ca0e708485c250744b1a"));
 
         vSeeds.clear();
 
-        base58Prefixes[PUBKEY_ADDRESS] = list_of(53);                     // BitNodes addresses start with 'N'
-        base58Prefixes[SCRIPT_ADDRESS] = list_of(0);                      // BitNodes script addresses start with '1'
-        base58Prefixes[SECRET_KEY]     = list_of(128);                    // BitNodes private keys start with '5'
-        base58Prefixes[EXT_PUBLIC_KEY] = list_of(0x04)(0x88)(0xB2)(0x1E); // BitNodes BIP32 pubkeys start with 'xpub'
-        base58Prefixes[EXT_SECRET_KEY] = list_of(0x04)(0x88)(0xAD)(0xE4); // BitNodes BIP32 prvkeys start with 'xprv'
-        base58Prefixes[EXT_COIN_TYPE]  = list_of(0x8000002D);             // BitNodes BIP44 coin type is '45'
+        base58Prefixes[PUBKEY_ADDRESS] = list_of(53);                     // BitNodesPro addresses start with 'N'
+        base58Prefixes[SCRIPT_ADDRESS] = list_of(0);                      // BitNodesPro script addresses start with '1'
+        base58Prefixes[SECRET_KEY]     = list_of(128);                    // BitNodesPro private keys start with '5'
+        base58Prefixes[EXT_PUBLIC_KEY] = list_of(0x04)(0x88)(0xB2)(0x1E); // BitNodesPro BIP32 pubkeys start with 'xpub'
+        base58Prefixes[EXT_SECRET_KEY] = list_of(0x04)(0x88)(0xAD)(0xE4); // BitNodesPro BIP32 prvkeys start with 'xprv'
+        base58Prefixes[EXT_COIN_TYPE]  = list_of(0x8000002D);             // BitNodesPro BIP44 coin type is '45'
 
         convertSeed6(vFixedSeeds, pnSeed6_main, ARRAYLEN(pnSeed6_main));
 
@@ -130,9 +130,9 @@ public:
         fTestnetToBeDeprecatedFieldRPC = false;
 
         nPoolMaxTransactions = 3;
-        strMasternodePaymentsPubKey = "0473c8707ed03770b71285829c7a0b944ba700f85deb6dae95b5aa32a29501fd5d9368ca112f93cfefd5ffaccf3d09d1ebbac95ad6e16d5239c129ac2d9c7e7dd6";
-        strDarksendPoolDummyAddress = "NeSnpf9Us5mQU56jwYYEv4B4C6wBANfADM";
-        nStartMasternodePayments = 1514278805;
+        strMasternodePaymentsPubKey = "04949830c1771a1d25896b2d3d7c7cca006cbd6ba1395ed0b946780ba30e9589b49ab9bab71a1f24799b8b307670044ac395759bf86d5402ca908a34415e6bc9fd";
+        strDarksendPoolDummyAddress = "NeSgnf9Us5mQU56jwDfEv4B4C6wBANfADM";
+        nStartMasternodePayments = 1516946410;
     }
 
     const Checkpoints::CCheckpointData& Checkpoints() const 
@@ -154,31 +154,31 @@ public:
         pchMessageStart[1] = 0xfa;
         pchMessageStart[2] = 0xca;
         pchMessageStart[3] = 0xff;
-        vAlertPubKey = ParseHex("04faa632781a7673b5c7057419bbf5263d474663cbc28f37682d6775f5d4e56d05ce68e5b385a57b042e5a02b15bba922c3e7217ebf199e0583ac3760b444243ba");
-        nDefaultPort = 17779;
+        vAlertPubKey = ParseHex("04458eba965d637715d00bf146d2295b6c421094a9d48d466783bf235d8010f95e0c2073d6c09bec4c27ecd9c845640fed3b8100f1ba13678925d67cd8273a52f5");
+        nDefaultPort = 17732;
         nEnforceBlockUpgradeMajority = 51;
         nRejectBlockOutdatedMajority = 75;
         nToCheckBlockUpgradeMajority = 100;
         nMinerThreads = 0;
-        nTargetTimespan = 24 * 60 * 60; // BitNodes: 1 day
-        nTargetSpacing = 2 * 60; // BitNodes: 2 minutes
+        nTargetTimespan = 24 * 60 * 60; // BitNodesPro: 1 day
+        nTargetSpacing = 2 * 60; // BitNodesPro: 2 minutes
 
         //! Modify the testnet genesis block so the timestamp is valid for a later start.
-        genesis.nTime = 1517443200;
-        genesis.nNonce = 164898;
+        genesis.nTime = 1519884000;
+        genesis.nNonce = 2508864;
 
         hashGenesisBlock = genesis.GetHash();
-        assert(hashGenesisBlock == uint256("0x000007504bdfef474b55203dd990645408eb0a9a3c4ba222570dfdd656819fde"));
+        assert(hashGenesisBlock == uint256("0x000005792f3627994a810db8ec6ce9127c16ecf59f5a9af888ad4fcf64b6c984"));
 
         vFixedSeeds.clear();
         vSeeds.clear();
 
-        base58Prefixes[PUBKEY_ADDRESS] = list_of(53);                     // Testnet BitNodes addresses start with 'N'
-        base58Prefixes[SCRIPT_ADDRESS] = list_of(0);                      // Testnet BitNodes script addresses start with '1'
-        base58Prefixes[SECRET_KEY]     = list_of(128);                    // Testnet BitNodes private keys start with '5'
-        base58Prefixes[EXT_PUBLIC_KEY] = list_of(0x04)(0x35)(0x87)(0xCF); // Testnet BitNodes BIP32 pubkeys start with 'tpub'
-        base58Prefixes[EXT_SECRET_KEY] = list_of(0x04)(0x35)(0x83)(0x94); // Testnet BitNodes BIP32 prvkeys start with 'tprv'
-        base58Prefixes[EXT_COIN_TYPE]  = list_of(0x80000001);             // Testnet BitNodes BIP44 coin type is '1'
+        base58Prefixes[PUBKEY_ADDRESS] = list_of(53);                     // Testnet BitNodesPro addresses start with 'N'
+        base58Prefixes[SCRIPT_ADDRESS] = list_of(0);                      // Testnet BitNodesPro script addresses start with '1'
+        base58Prefixes[SECRET_KEY]     = list_of(128);                    // Testnet BitNodesPro private keys start with '5'
+        base58Prefixes[EXT_PUBLIC_KEY] = list_of(0x04)(0x35)(0x87)(0xCF); // Testnet BitNodesPro BIP32 pubkeys start with 'tpub'
+        base58Prefixes[EXT_SECRET_KEY] = list_of(0x04)(0x35)(0x83)(0x94); // Testnet BitNodesPro BIP32 prvkeys start with 'tprv'
+        base58Prefixes[EXT_COIN_TYPE]  = list_of(0x80000001);             // Testnet BitNodesPro BIP44 coin type is '1'
 
         convertSeed6(vFixedSeeds, pnSeed6_test, ARRAYLEN(pnSeed6_test));
 
@@ -191,9 +191,9 @@ public:
         fTestnetToBeDeprecatedFieldRPC = true;
 
         nPoolMaxTransactions = 2;
-        strMasternodePaymentsPubKey = "04c4a98bce03576020950581d749cda942d3ea23ae443095d8f1d6cd28166d5d4415415a7a61c0d57b10e841e28254a92446162c3a783069f1c719f40693e8df56";
-        strDarksendPoolDummyAddress = "NeSnpf9Us5mQU56jwYYEv4B4C6wBANfADM";
-        nStartMasternodePayments = 1514278800;
+        strMasternodePaymentsPubKey = "0457eb13ba1a084d5f831942b819b557e0669e441621cad65b7e167d8f209ec5fafd7c74786144df61582bcce043f54310410206e95078c33f2d59369af93404ea";
+        strDarksendPoolDummyAddress = "NeSnpf9Us5mQU14jwYfEG4B4C6wmANfADM";
+        nStartMasternodePayments = 1519884010;
     }
     const Checkpoints::CCheckpointData& Checkpoints() const 
     {
@@ -219,15 +219,15 @@ public:
         nRejectBlockOutdatedMajority = 950;
         nToCheckBlockUpgradeMajority = 1000;
         nMinerThreads = 1;
-        nTargetTimespan = 24 * 60 * 60; // BitNodes: 1 day
-        nTargetSpacing = 2 * 60; // BitNodes: 2 minutes
+        nTargetTimespan = 24 * 60 * 60; // BitNodesPro: 1 day
+        nTargetSpacing = 2 * 60; // BitNodesPro: 2 minutes
         bnProofOfWorkLimit = ~uint256(0) >> 1;
-        genesis.nTime = 1518566400;
+        genesis.nTime = 1522562400;
         genesis.nBits = 0x207fffff;
-        genesis.nNonce = 1;
+        genesis.nNonce = 0;
         hashGenesisBlock = genesis.GetHash();
-        nDefaultPort = 17774;
-        assert(hashGenesisBlock == uint256("0x739b1fa116eb3952141850e937526fcb4951da3bd9dcf3d34d1d9e87bcd3096b"));
+        nDefaultPort = 17632;
+        assert(hashGenesisBlock == uint256("0x133bc314fe3cf702f19b16c7f74ec7935412d9d440c9492f6d0e1287e83d4131"));
 
         vFixedSeeds.clear(); //! Regtest mode doesn't have any fixed seeds.
         vSeeds.clear();  //! Regtest mode doesn't have any DNS seeds.

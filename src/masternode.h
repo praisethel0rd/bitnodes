@@ -1,6 +1,6 @@
 // Copyright (c) 2014-2017 The Dash developers
-// Copyright (c) 2017 The BitNodes developers
-// Distributed under the MIT/X13 software license, see the accompanying
+// Copyright (c) 2017-2018 The BitNodesPro developers
+// Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 #ifndef MASTERNODE_H
 #define MASTERNODE_H
@@ -100,7 +100,7 @@ public:
 
 
 //
-// The Masternode Class. For managing the Darksend process. It contains the input of the 1000NODE, signature to prove
+// The Masternode Class. For managing the Darksend process. It contains the input of the 1000 XNODE, signature to prove
 // it's the one who own that ip address and code for calculating the payment election.
 //
 class CMasternode

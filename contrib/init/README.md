@@ -1,9 +1,9 @@
 Sample configuration files for:
 
-SystemD: bitnodesd.service
-Upstart: bitnodesd.conf
-OpenRC:  bitnodesd.openrc
-         bitnodesd.openrcconf
+SystemD: bitnodesprod.service
+Upstart: bitnodesprod.conf
+OpenRC:  bitnodesprod.openrc
+         bitnodesprod.openrcconf
 
 have been made available to assist packagers in creating node packages here.
 

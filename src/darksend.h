@@ -1,6 +1,6 @@
 // Copyright (c) 2014-2017 The Dash developers
-// Copyright (c) 2017 The BitNodes developers
-// Distributed under the MIT/X13 software license, see the accompanying
+// Copyright (c) 2017-2018 The BitNodesPro developers
+// Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #ifndef DARKSEND_H
@@ -47,8 +47,8 @@ class CActiveMasternode;
 #define DARKSEND_RELAY_OUT                2
 #define DARKSEND_RELAY_SIG                3
 
-static const int64_t DARKSEND_COLLATERAL = (0.001*COIN);
-static const int64_t DARKSEND_POOL_MAX = (999999.999*COIN);
+static const int64_t DARKSEND_COLLATERAL = (0.01*COIN);
+static const int64_t DARKSEND_POOL_MAX = (999.99*COIN);
 
 extern CDarksendPool darkSendPool;
 extern CDarkSendSigner darkSendSigner;
@@ -246,7 +246,7 @@ public:
 class CDarkSendSigner
 {
 public:
-    /// Is the inputs associated with this public key? (and there is 1000 NODE - checking if valid masternode)
+    /// Is the inputs associated with this public key? (and there is 10000 XNODE - checking if valid masternode)
     bool IsVinAssociatedWithPubkey(CTxIn& vin, CPubKey& pubkey);
     /// Set the private/public key values, returns true if successful
     bool SetKey(std::string strSecret, std::string& errorMessage, CKey& key, CPubKey& pubkey);
@@ -487,7 +487,7 @@ public:
 
     void GetDenominationsToString(int nDenom, std::string& strDenom);
 
-    /// Get the denominations for a specific amount of bitnodes.
+    /// Get the denominations for a specific amount of bitnodespro.
     int GetDenominationsByAmount(int64_t nAmount, int nDenomTarget=0); // is not used anymore?
     int GetDenominationsByAmounts(std::vector<int64_t>& vecAmount);
 

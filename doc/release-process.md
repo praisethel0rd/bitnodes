@@ -2,7 +2,7 @@ Release Process
 ====================
 
 * update translations (ping wumpus, Diapolo or tcatm on IRC)
-* see https://github.com/bitnodes/bitnodes/blob/master/doc/translation_process.md#syncing-with-transifex
+* see https://github.com/bitnodespro/bitnodespro/blob/master/doc/translation_process.md#syncing-with-transifex
 
 * * *
 
@@ -33,7 +33,7 @@ Release Process
 
 	export SIGNER=(your gitian key, ie bluematt, sipa, etc)
 	export VERSION=(new version, e.g. 0.8.0)
-	pushd ./bitnodes
+	pushd ./bitnodespro
 	git checkout v${VERSION}
 	popd
 	pushd ./gitian-builder
@@ -54,29 +54,29 @@ Release Process
 
   By default, gitian will fetch source files as needed. For offline builds, they can be fetched ahead of time:
 
-	make -C ../bitnodes/depends download SOURCES_PATH=`pwd`/cache/common
+	make -C ../bitnodespro/depends download SOURCES_PATH=`pwd`/cache/common
 
   Only missing files will be fetched, so this is safe to re-run for each build.
 
-###Build BitNodes Core for Linux, Windows, and OS X:
+###Build BitNodesPro Core for Linux, Windows, and OS X:
 
-	./bin/gbuild --commit bitnodes=v${VERSION} ../bitnodes/contrib/gitian-descriptors/gitian-linux.yml
-	./bin/gsign --signer $SIGNER --release ${VERSION}-linux --destination ../gitian.sigs/ ../bitnodes/contrib/gitian-descriptors/gitian-linux.yml
-	mv build/out/bitnodes-*.tar.gz build/out/src/bitnodes-*.tar.gz ../
-	./bin/gbuild --commit bitnodes=v${VERSION} ../bitnodes/contrib/gitian-descriptors/gitian-win.yml
-	./bin/gsign --signer $SIGNER --release ${VERSION}-win --destination ../gitian.sigs/ ../bitnodes/contrib/gitian-descriptors/gitian-win.yml
-	mv build/out/bitnodes-*.zip build/out/bitnodes-*.exe ../
-	./bin/gbuild --commit bitcoin=v${VERSION} ../bitnodes/contrib/gitian-descriptors/gitian-osx.yml
-	./bin/gsign --signer $SIGNER --release ${VERSION}-osx-unsigned --destination ../gitian.sigs/ ../bitnodes/contrib/gitian-descriptors/gitian-osx.yml
-	mv build/out/bitnodes-*-unsigned.tar.gz inputs/bitnodes-osx-unsigned.tar.gz
-	mv build/out/bitnodes-*.tar.gz build/out/bitnodes-*.dmg ../
+	./bin/gbuild --commit bitnodespro=v${VERSION} ../bitnodespro/contrib/gitian-descriptors/gitian-linux.yml
+	./bin/gsign --signer $SIGNER --release ${VERSION}-linux --destination ../gitian.sigs/ ../bitnodespro/contrib/gitian-descriptors/gitian-linux.yml
+	mv build/out/bitnodespro-*.tar.gz build/out/src/bitnodespro-*.tar.gz ../
+	./bin/gbuild --commit bitnodespro=v${VERSION} ../bitnodespro/contrib/gitian-descriptors/gitian-win.yml
+	./bin/gsign --signer $SIGNER --release ${VERSION}-win --destination ../gitian.sigs/ ../bitnodespro/contrib/gitian-descriptors/gitian-win.yml
+	mv build/out/bitnodespro-*.zip build/out/bitnodespro-*.exe ../
+	./bin/gbuild --commit bitcoin=v${VERSION} ../bitnodespro/contrib/gitian-descriptors/gitian-osx.yml
+	./bin/gsign --signer $SIGNER --release ${VERSION}-osx-unsigned --destination ../gitian.sigs/ ../bitnodespro/contrib/gitian-descriptors/gitian-osx.yml
+	mv build/out/bitnodespro-*-unsigned.tar.gz inputs/bitnodespro-osx-unsigned.tar.gz
+	mv build/out/bitnodespro-*.tar.gz build/out/bitnodespro-*.dmg ../
 	popd
   Build output expected:
 
-  1. source tarball (bitnodes-${VERSION}.tar.gz)
-  2. linux 32-bit and 64-bit binaries dist tarballs (bitnodes-${VERSION}-linux[32|64].tar.gz)
-  3. windows 32-bit and 64-bit installers and dist zips (bitnodes-${VERSION}-win[32|64]-setup.exe, bitnodes-${VERSION}-win[32|64].zip)
-  4. OSX unsigned installer (bitnodes-${VERSION}-osx-unsigned.dmg)
+  1. source tarball (bitnodespro-${VERSION}.tar.gz)
+  2. linux 32-bit and 64-bit binaries dist tarballs (bitnodespro-${VERSION}-linux[32|64].tar.gz)
+  3. windows 32-bit and 64-bit installers and dist zips (bitnodespro-${VERSION}-win[32|64]-setup.exe, bitnodespro-${VERSION}-win[32|64].zip)
+  4. OSX unsigned installer (bitnodespro-${VERSION}-osx-unsigned.dmg)
   5. Gitian signatures (in gitian.sigs/${VERSION}-<linux|win|osx-unsigned>/(your gitian key)/
 
 ###Next steps:
@@ -100,9 +100,9 @@ Commit your signature to gitian.sigs:
 	pushd ./gitian-builder
 	# Fetch the signature as instructed by Evan
 	cp signature.tar.gz inputs/
-	./bin/gbuild -i ../bitnodes/contrib/gitian-descriptors/gitian-osx-signer.yml
-	./bin/gsign --signer $SIGNER --release ${VERSION}-osx-signed --destination ../gitian.sigs/ ../bitnodes/contrib/gitian-descriptors/gitian-osx-signer.yml
-	mv build/out/bitnodes-osx-signed.dmg ../bitnodes-${VERSION}-osx.dmg
+	./bin/gbuild -i ../bitnodespro/contrib/gitian-descriptors/gitian-osx-signer.yml
+	./bin/gsign --signer $SIGNER --release ${VERSION}-osx-signed --destination ../gitian.sigs/ ../bitnodespro/contrib/gitian-descriptors/gitian-osx-signer.yml
+	mv build/out/bitnodespro-osx-signed.dmg ../bitnodespro-${VERSION}-osx.dmg
 	popd
 
 Commit your signature for the signed OSX binary:
@@ -134,9 +134,9 @@ rm SHA256SUMS
 - Upload zips and installers, as well as `SHA256SUMS.asc` from last step, to the bitcoin.org server
   into `/var/www/bin/bitcoin-core-${VERSION}`
 
-- Update bitnodes.co version ***TODO***
+- Update bitnodespro.co version ***TODO***
 
-  - First, check to see if the bitnodes.co maintainers have prepared a
+  - First, check to see if the bitnodespro.co maintainers have prepared a
     release: https://github.com/bitcoin/bitcoin.org/labels/Releases
 
       - If they have, it will have previously failed their Travis CI
